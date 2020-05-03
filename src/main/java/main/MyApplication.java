@@ -1,5 +1,6 @@
 package main;
 
+import controller.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,10 +10,18 @@ import javafx.stage.Stage;
 public class MyApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Main.class.getResource("/fxml/mainmenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/game.fxml"));
+        Parent root = (Parent)loader.load();
+
+        GameController controller = (GameController)loader.getController();
+        Scene scene = new Scene(root);
+
+        controller.initListeners(stage, scene);      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
+
         stage.setTitle("Snake Game");
         stage.setResizable(true);
-        stage.setScene(new Scene(root));
+
+        stage.setScene(scene);
         stage.show();
     }
 }
