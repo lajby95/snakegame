@@ -71,6 +71,12 @@ public class Snake {
         } else if(direction == 'r') {
             snakeBody.get(0).set(snakeBody.get(0).getX()+1, snakeBody.get(0).getY());
         }
+
+        if(snakeBody.isHeadCollidingWithAnyOtherPart()) {
+            System.out.println("UTKOZES "+Math.random());
+        } else {
+            System.out.println("nem utkozik "+Math.random());
+        }
     }
 
 }

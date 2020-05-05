@@ -27,4 +27,11 @@ public class SnakeBodyPart {
         this.x = part.getX();
         this.y = part.getY();
     }
+
+    public Boolean isCollidingWithOtherPart(SnakeBodyPart other){
+        if(other.getX() == this.getX() && other.getY() == this.getY()) {
+            return true;
+        }
+        return false;
+    }
 }

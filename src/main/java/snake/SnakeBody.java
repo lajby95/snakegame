@@ -35,6 +35,19 @@ public class SnakeBody {
         return body.lastElement();
     }
 
+    public Boolean isHeadCollidingWithAnyOtherPart(){
+        Boolean collides = false;
+
+        for (int i = 1; i < size(); i++) {
+            if(this.get(i).isCollidingWithOtherPart(this.get(0))) {
+                collides = true;
+                break;
+            }
+        }
+
+        return collides;
+    }
+
     public int size(){
         return body.size();
     }
