@@ -12,9 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-import snake.Snake;
-import snake.SnakeBody;
-import snake.SnakeBodyPart;
+import snake.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,14 +48,7 @@ public class GameController implements Initializable {
         snake.getBody().extend();
         snake.getBody().extend();
         snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
+        snake.getPickups().add(10, 10, "apple");
         initRectArray();
         initGameLoop();
     }
@@ -104,6 +95,17 @@ public class GameController implements Initializable {
         log.info("Rectangle array initialized");
     }
 
+    public Rectangle getRect(int posX, int posY){
+        return (Rectangle)gameArea.getChildren().get(posX*sizeX+posY);
+    }
+
+    public void drawAllPickupsOfType(String type){
+        for(Pickup p : snake.getPickups().getAll(type)) {
+            Rectangle r = getRect(p.getPosX(), p.getPosY());
+            r.setFill(Color.RED);
+        }
+    }
+
     public void drawBoard(){
 //        int[][] board = snake.getBoard();
         int sizeX = snake.getSizeX();
@@ -115,10 +117,15 @@ public class GameController implements Initializable {
         SnakeBody snakeBody = snake.getBody();
         for (int i = 0; i < snakeBody.size(); i++) {
             SnakeBodyPart part = snakeBody.get(i);
-            Rectangle r = (Rectangle)gameArea.getChildren().get(part.getX()*sizeX+part.getY());
+            Rectangle r = getRect(part.getX(), part.getY());
             r.setFill(Color.BLACK);
         }
+
+        // TODO draw pickups
+        drawAllPickupsOfType("apple");
     }
+
+
 
     private void initGameLoop(){
         gameTimer = new AnimationTimer(){

@@ -3,6 +3,8 @@ package snake;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Slf4j
 public class Snake {
 
@@ -13,6 +15,9 @@ public class Snake {
 
 //    @Getter
 //    private int[][] board = new int[sizeX][sizeY];
+
+    @Getter
+    Pickups pickups = new Pickups();
 
     SnakeBody snakeBody = new SnakeBody();
 
@@ -96,6 +101,42 @@ public class Snake {
         if(snakeBody.isHeadCollidingWithAnyOtherPart()) {
             log.info("Snake Collision with itself!");
         }
+        if(getPickupIndexCollidingWithHead() != -1) {
+            Pickup eaten = pickups.eat(getPickupIndexCollidingWithHead());
+            log.info("Snake has eaten a(n) {}",eaten.getType());
+        }
+    }
+
+    public void placeRandomPickup(){
+        int randomX = ThreadLocalRandom.current().nextInt(0, sizeX+1);
+        int randomY = ThreadLocalRandom.current().nextInt(0, sizeY+1);
+        this.getPickups().add(randomX, randomY, "apple");
+    }
+
+//    public Boolean isHeadCollidingWithPickup(){
+//        Boolean collides = false;
+//
+//        for (Pickup p : pickups.getAll()) {
+//            if(snakeBody.get(0).getX() == p.getPosX() && snakeBody.get(0).getY() == p.getPosY()) {
+//                collides = true;
+//                break;
+//            }
+//        }
+//
+//        return collides;
+//    }
+
+    public int getPickupIndexCollidingWithHead(){
+        int in = -1;
+
+        Pickups ps = pickups;
+        for (int i=0; i<ps.getAll().size(); i++) {
+            if(snakeBody.get(0).getX() == ps.get(i).getPosX() && snakeBody.get(0).getY() == ps.get(i).getPosY()) {
+                in = i;
+            }
+        }
+
+        return in;
     }
 
 }
