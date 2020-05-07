@@ -1,7 +1,9 @@
 package snake;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Snake {
 
     @Getter
@@ -9,8 +11,8 @@ public class Snake {
     @Getter
     private int sizeY = 37;
 
-    @Getter
-    private int[][] board = new int[sizeX][sizeY];
+//    @Getter
+//    private int[][] board = new int[sizeX][sizeY];
 
     SnakeBody snakeBody = new SnakeBody();
 
@@ -18,41 +20,60 @@ public class Snake {
         return snakeBody;
     }
 
-    private Boolean snakePlaced = false;
+//    private Boolean snakePlaced = false;
 
+    @Getter
     private char direction = 'u';
 
-    public void setDirection(char dir){
-        if(dir == 'u' || dir == 'd' || dir == 'l' || dir == 'r') {
-            this.direction = dir;
+    public void setDirection(char dirNew){
+        if(dirNew == 'u' || dirNew == 'd' || dirNew == 'l' || dirNew == 'r') {
+            char dir = getDirection();
+            if(dirNew == dir) {
+                return;
+            }
+            if(
+                    dirNew == 'd' && dir == 'u'
+                    || dirNew == 'u' && dir == 'd'
+                    || dirNew == 'l' && dir == 'r'
+                    || dirNew == 'r' && dir == 'l'
+            ) {
+                log.info("Can't change direction to opposite!");
+                return;
+            }
+
+            this.direction = dirNew;
+            String d = "";
+            switch(dirNew){
+                case 'u': d = "UP"; break;
+                case 'd': d = "DOWN"; break;
+                case 'l': d = "LEFT"; break;
+                case 'r': d = "RIGHT"; break;
+            }
+            log.info("direction changed to {}", d);
         }
     }
 
     public Snake(int posX, int posY){
-        initTable();
+//        initTable();
         place(posX, posY);
     }
     public Snake(){
-        initTable();
+//        initTable();
     }
 
-    public void initTable(){
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                board[i][j] = 0;
-            }
-        }
-    }
+//    public void initTable(){
+//        for (int i = 0; i < board.length; i++) {
+//            for (int j = 0; j < board[0].length; j++) {
+//                board[i][j] = 0;
+//            }
+//        }
+//    }
 
     public void place(int posX, int posY){
-        if(snakePlaced) {
-            return;
-        }
         if(posX >= sizeX || posY >= sizeY) {
             return;
         }
-        snakeBody.addPart(posX, posY);
-        snakePlaced = true;
+        snakeBody.place(posX, posY);
     }
 
     public void move(){
@@ -73,9 +94,7 @@ public class Snake {
         }
 
         if(snakeBody.isHeadCollidingWithAnyOtherPart()) {
-            System.out.println("UTKOZES "+Math.random());
-        } else {
-            System.out.println("nem utkozik "+Math.random());
+            log.info("Snake Collision with itself!");
         }
     }
 

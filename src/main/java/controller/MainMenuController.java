@@ -16,8 +16,6 @@ public class MainMenuController {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
-        stage.setWidth(600);
-        stage.setHeight(600);
         stage.show();
     }
 }

@@ -15,8 +15,7 @@ public class SnakeBodyPart {
         this.y = y;
     }
     public SnakeBodyPart(SnakeBodyPart part) {
-        this.x = part.getX();
-        this.y = part.getY();
+        set(part);
     }
 
     public void set(int x, int y) {

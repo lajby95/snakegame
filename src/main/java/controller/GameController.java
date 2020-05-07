@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 import snake.Snake;
 import snake.SnakeBody;
 import snake.SnakeBodyPart;
@@ -18,6 +19,7 @@ import snake.SnakeBodyPart;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@Slf4j
 public class GameController implements Initializable {
 
     private AnimationTimer gameTimer;
@@ -41,21 +43,21 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        snake.getBody().addPart(17,17);
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
-        snake.getBody().addPart();
+        snake.getBody().place(17,17);
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
+        snake.getBody().extend();
         initRectArray();
         initGameLoop();
     }
@@ -67,17 +69,21 @@ public class GameController implements Initializable {
         this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.W) {
+                if(event.getCode() == KeyCode.UP) {
                     snake.setDirection('u');
-                } else if(event.getCode() == KeyCode.S) {
+                } else if(event.getCode() == KeyCode.DOWN) {
                     snake.setDirection('d');
-                } else if(event.getCode() == KeyCode.A) {
+                } else if(event.getCode() == KeyCode.LEFT) {
                     snake.setDirection('l');
-                } else if(event.getCode() == KeyCode.D) {
+                } else if(event.getCode() == KeyCode.RIGHT) {
                     snake.setDirection('r');
                 }
             }
         });
+        log.info("Keyboard listener initialized");
+
+        stage.setWidth(510);
+        stage.setHeight(580);
     }
 
     public void initRectArray(){
@@ -95,24 +101,21 @@ public class GameController implements Initializable {
                 gameArea.getChildren().add(r);
             }
         }
+        log.info("Rectangle array initialized");
     }
 
     public void drawBoard(){
-        int[][] board = snake.getBoard();
+//        int[][] board = snake.getBoard();
+        int sizeX = snake.getSizeX();
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                Rectangle r = (Rectangle)gameArea.getChildren().get(i*board[0].length+j);
-                r.setFill(Color.WHITE);
-            }
-        }
+        gameArea.getChildren().parallelStream().forEach(r -> {
+            ((Rectangle)r).setFill(Color.WHITE);
+        });
 
         SnakeBody snakeBody = snake.getBody();
-//        System.out.println("---- PART ----");
         for (int i = 0; i < snakeBody.size(); i++) {
             SnakeBodyPart part = snakeBody.get(i);
-//            System.out.println(i+". part{"+part.getX()+","+part.getY()+"}");
-            Rectangle r = (Rectangle)gameArea.getChildren().get(part.getX()*board[0].length+part.getY());
+            Rectangle r = (Rectangle)gameArea.getChildren().get(part.getX()*sizeX+part.getY());
             r.setFill(Color.BLACK);
         }
     }
@@ -131,5 +134,6 @@ public class GameController implements Initializable {
             }
         };
         gameTimer.start();
+        log.info("Game loop initialized");
     }
 }
