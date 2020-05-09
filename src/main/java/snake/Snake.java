@@ -24,9 +24,6 @@ public class Snake {
     public Pickup popLastEaten(){
         Pickup p = new Pickup(lastEatenPickup);
         lastEatenPickup = new Pickup(new Point(0,0), "empty");
-        if(p.getType().equals("empty")) {
-            log.info("lasteaten type:: {}", p.getType());
-        }
         return p;
     }
 
@@ -146,6 +143,16 @@ public class Snake {
             head.set(head.getPos().x+1, head.getPos().y);
         }
 
+        // snake can go through edge of map to other side
+        head.set(head.getPos().x % sizeX, head.getPos().y % sizeY);
+        if(head.getPos().x < 0) {
+            head.set(sizeX-head.getPos().x-2, head.getPos().y);
+        }
+        if(head.getPos().y < 0) {
+            head.set(head.getPos().x, sizeY-head.getPos().y-2);
+        }
+        log.info("Snake head position: ({},{})", head.getPos().x, head.getPos().y);
+
         if(body.isHeadCollidingWithBody()) {
             log.info("Snake Collision with itself!");
         }
@@ -163,28 +170,7 @@ public class Snake {
             int randomIndex = ThreadLocalRandom.current().nextInt(0, emptyCells.size());
             this.pickups.place(emptyCells.get(randomIndex), "apple");
         }
-
-
-//        int randomX, randomY;
-//        do {
-//            randomX = ThreadLocalRandom.current().nextInt(0, sizeX);
-//            randomY = ThreadLocalRandom.current().nextInt(0, sizeY);
-//        } while(this.body.isSnakeAt(randomX, randomY));
-//        this.pickups.place(randomX, randomY, "apple");
     }
-
-//    public Boolean isHeadCollidingWithPickup(){
-//        Boolean collides = false;
-//
-//        for (Pickup p : pickups.getAll()) {
-//            if(snakeBody.get(0).getX() == p.getPosX() && snakeBody.get(0).getY() == p.getPosY()) {
-//                collides = true;
-//                break;
-//            }
-//        }
-//
-//        return collides;
-//    }
 
     public int getPickupIndexCollidingWithHead(){
         int in = -1;
@@ -199,7 +185,6 @@ public class Snake {
             }
         }
 
-        log.info("in ddd  {}", in);
         return in;
     }
 
