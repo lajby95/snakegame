@@ -41,14 +41,14 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        snake.getBody().place(17,17);
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getBody().extend();
-        snake.getPickups().add(10, 10, "apple");
+        snake.body.place(17,17);
+        snake.body.extend();
+        snake.body.extend();
+        snake.body.extend();
+        snake.body.extend();
+        snake.body.extend();
+        snake.body.extend();
+        snake.pickups.place(10, 10, "apple");
         initRectArray();
         initGameLoop();
     }
@@ -100,40 +100,59 @@ public class GameController implements Initializable {
     }
 
     public void drawAllPickupsOfType(String type){
-        for(Pickup p : snake.getPickups().getAll(type)) {
-            Rectangle r = getRect(p.getPosX(), p.getPosY());
+        for(Pickup p : snake.pickups.getAll(type)) {
+            Rectangle r = getRect(p.getPos().x, p.getPos().y);
             r.setFill(Color.RED);
         }
     }
 
     public void drawBoard(){
 //        int[][] board = snake.getBoard();
-        int sizeX = snake.getSizeX();
 
         gameArea.getChildren().parallelStream().forEach(r -> {
             ((Rectangle)r).setFill(Color.WHITE);
         });
 
-        SnakeBody snakeBody = snake.getBody();
-        for (int i = 0; i < snakeBody.size(); i++) {
-            SnakeBodyPart part = snakeBody.get(i);
-            Rectangle r = getRect(part.getX(), part.getY());
+        // TODO draw pickups
+        drawAllPickupsOfType("apple");
+
+        for (int i = 0; i < snake.body.size(); i++) {
+            SnakeBodyPart part = snake.body.get(i);
+            Rectangle r = getRect(part.getPos().x, part.getPos().y);
             r.setFill(Color.BLACK);
         }
 
-        // TODO draw pickups
-        drawAllPickupsOfType("apple");
     }
 
+    public Boolean canPlacePickup(){
+        double interval = 3;
 
+        long currentTimestamp = System.currentTimeMillis();
+        if(currentTimestamp >= (snake.pickups.getLastPlacement()+interval*1000)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void moveSnake(){
+        snake.move();
+        Pickup lastEaten = snake.popLastEaten();
+        if(!lastEaten.getType().equals("empty")) {
+            snake.pickupEffect(lastEaten);
+        }
+    }
 
     private void initGameLoop(){
         gameTimer = new AnimationTimer(){
             private long lastUpdate = 0;
             @Override
             public void handle(long now){
+                if(canPlacePickup()) {
+                    snake.placeRandomPickup();
+                }
                 if(now - lastUpdate >= updateInterval*1000*1000) {
-                    snake.move();
+                    moveSnake();
                     drawBoard();
 
                     lastUpdate = now;

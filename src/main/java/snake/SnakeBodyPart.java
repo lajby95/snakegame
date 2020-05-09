@@ -1,36 +1,42 @@
 package snake;
 
+import javafx.geometry.Point2D;
 import lombok.Getter;
 
+import java.awt.*;
 import java.util.Vector;
 
 public class SnakeBodyPart {
     @Getter
-    private int x;
-    @Getter
-    private int y;
+    private Point pos;
 
-    public SnakeBodyPart(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public SnakeBodyPart(Point p) {
+        this.pos = p;
     }
     public SnakeBodyPart(SnakeBodyPart part) {
         set(part);
     }
 
+    public void set(Point p) {
+        this.pos = p;
+    }
     public void set(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.pos = new Point(x,y);
     }
     public void set(SnakeBodyPart part) {
-        this.x = part.getX();
-        this.y = part.getY();
+        this.pos = part.getPos();
     }
 
     public Boolean isCollidingWithOtherPart(SnakeBodyPart other){
-        if(other.getX() == this.getX() && other.getY() == this.getY()) {
-            return true;
-        }
-        return false;
+//        if(other.getPos().getX() == this.getPos().getX() && other.getPos().getY() == this.getPos().getY()) {
+//            return true;
+//        }
+//        return false;
+
+        return this.equals(other);
+    }
+
+    public Boolean equals(Pickup other){
+        return this.getPos().x == other.getPos().x && this.getPos().y == other.getPos().y;
     }
 }

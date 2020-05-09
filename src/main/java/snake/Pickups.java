@@ -1,18 +1,29 @@
 package snake;
 
+import javafx.geometry.Point2D;
+import lombok.Getter;
+
+import java.awt.*;
 import java.util.Vector;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Pickups {
 
     Vector<Pickup> pickups = new Vector<Pickup>();
 
+    @Getter
+    long lastPlacement;
+
     public Pickups(){
 
     }
 
-    public void add(int posX, int posY, String type){
-        pickups.add(new Pickup(posX, posY, type));
+    public void place(Point point, String type){
+        pickups.add(new Pickup(point, type));
+        lastPlacement = System.currentTimeMillis();
+    }
+    public void place(int x, int y, String type){
+        pickups.add(new Pickup(new Point(x,y), type));
+        lastPlacement = System.currentTimeMillis();
     }
 
     public Pickup get(int i){

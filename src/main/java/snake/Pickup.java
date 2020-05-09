@@ -1,22 +1,25 @@
 package snake;
 
+import javafx.geometry.Point2D;
 import lombok.Getter;
+
+import java.awt.*;
 
 public class Pickup {
 
     @Getter
-    int posX;
-    @Getter
-    int posY;
+    private Point pos;
 
     @Getter
-    String type;
+    private String type;
 
-    public Pickup(int posX, int posY, String type){
-        this.posX = posX;
-        this.posY = posY;
+    public Pickup(Point p, String type){
+        this.pos = p;
         this.type = type;
     }
-
+    public Pickup(Pickup other){
+        this.pos = other.getPos();
+        this.type = other.getType();
+    }
 
 }

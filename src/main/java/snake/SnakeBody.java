@@ -1,8 +1,10 @@
 package snake;
 
+import javafx.geometry.Point2D;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.util.Vector;
 
 @Slf4j
@@ -13,8 +15,8 @@ public class SnakeBody {
     @Getter
     private Vector<SnakeBodyPart> body = new Vector<SnakeBodyPart>();
 
-    public SnakeBody(int posX, int posY){
-        body.add(new SnakeBodyPart(posX, posY));
+    public SnakeBody(Point p){
+        body.add(new SnakeBodyPart(p));
     }
     public SnakeBody(){
 
@@ -37,7 +39,7 @@ public class SnakeBody {
             log.error("Snake is already placed!");
             return;
         }
-        SnakeBodyPart newTail = new SnakeBodyPart(x, y);
+        SnakeBodyPart newTail = new SnakeBodyPart(new Point(x,y));
         body.add(newTail);
         snakePlaced = true;
         log.info("Snake placed to ({},{})", x, y);
@@ -50,7 +52,7 @@ public class SnakeBody {
         return body.lastElement();
     }
 
-    public Boolean isHeadCollidingWithAnyOtherPart(){
+    public Boolean isHeadCollidingWithBody(){
         Boolean collides = false;
 
         for (int i = 1; i < size(); i++) {
@@ -62,6 +64,19 @@ public class SnakeBody {
 
         return collides;
     }
+
+//    public Boolean isSnakeAt(int x, int y){
+//        Boolean collides = false;
+//
+//        for (int i = 0; i < size(); i++) {
+//            if(this.get(i).getPos().getX() == x && this.get(i).getPos().getY() == y) {
+//                collides = true;
+//                break;
+//            }
+//        }
+//
+//        return collides;
+//    }
 
     public int size(){
         return body.size();
