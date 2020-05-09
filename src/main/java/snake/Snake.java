@@ -35,31 +35,32 @@ public class Snake {
     private char direction = 'u';
 
     public void setDirection(char dirNew){
-        if(dirNew == 'u' || dirNew == 'd' || dirNew == 'l' || dirNew == 'r') {
-            char dir = getDirection();
-            if(dirNew == dir) {
-                return;
-            }
-            if(
-                    dirNew == 'd' && dir == 'u'
-                    || dirNew == 'u' && dir == 'd'
-                    || dirNew == 'l' && dir == 'r'
-                    || dirNew == 'r' && dir == 'l'
-            ) {
-                log.info("Can't change direction to opposite!");
-                return;
-            }
-
-            this.direction = dirNew;
-            String d = "";
-            switch(dirNew){
-                case 'u': d = "UP"; break;
-                case 'd': d = "DOWN"; break;
-                case 'l': d = "LEFT"; break;
-                case 'r': d = "RIGHT"; break;
-            }
-            log.info("direction changed to {}", d);
+        if(!(dirNew == 'u' || dirNew == 'd' || dirNew == 'l' || dirNew == 'r')) {
+            return;
         }
+        char dir = getDirection();
+        if(dirNew == dir) {
+            return;
+        }
+        if(
+                dirNew == 'd' && dir == 'u'
+                || dirNew == 'u' && dir == 'd'
+                || dirNew == 'l' && dir == 'r'
+                || dirNew == 'r' && dir == 'l'
+        ) {
+            log.info("Can't change direction to opposite!");
+            return;
+        }
+
+        this.direction = dirNew;
+        String d = "";
+        switch(dirNew){
+            case 'u': d = "UP"; break;
+            case 'd': d = "DOWN"; break;
+            case 'l': d = "LEFT"; break;
+            case 'r': d = "RIGHT"; break;
+        }
+        log.info("direction changed to {}", d);
     }
 
     public Snake(int posX, int posY){

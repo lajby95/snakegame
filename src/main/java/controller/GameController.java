@@ -24,6 +24,8 @@ public class GameController implements Initializable {
 
     int updateInterval = 300;
 
+    char dir = 'u';
+
     Stage stage;
     Scene scene;
 
@@ -61,13 +63,13 @@ public class GameController implements Initializable {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.UP) {
-                    snake.setDirection('u');
+                    dir = 'u';
                 } else if(event.getCode() == KeyCode.DOWN) {
-                    snake.setDirection('d');
+                    dir = 'd';
                 } else if(event.getCode() == KeyCode.LEFT) {
-                    snake.setDirection('l');
+                    dir = 'l';
                 } else if(event.getCode() == KeyCode.RIGHT) {
-                    snake.setDirection('r');
+                    dir = 'r';
                 }
             }
         });
@@ -116,10 +118,15 @@ public class GameController implements Initializable {
         // TODO draw pickups
         drawAllPickupsOfType("apple");
 
+        float shade = 0.0f;
         for (int i = 0; i < snake.body.size(); i++) {
+            Color color = Color.color(shade, shade, shade);
+            if(shade < 0.8f && i<5) {
+                shade += 0.1f;
+            }
             SnakeBodyPart part = snake.body.get(i);
             Rectangle r = getRect(part.getPos().x, part.getPos().y);
-            r.setFill(Color.BLACK);
+            r.setFill(color);
         }
 
     }
@@ -152,6 +159,9 @@ public class GameController implements Initializable {
                     snake.placeRandomPickup();
                 }
                 if(now - lastUpdate >= updateInterval*1000*1000) {
+                    if(dir != snake.getDirection()) {
+                        snake.setDirection(dir);
+                    }
                     moveSnake();
                     drawBoard();
 

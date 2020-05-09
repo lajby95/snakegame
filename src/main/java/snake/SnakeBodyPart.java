@@ -27,13 +27,11 @@ public class SnakeBodyPart {
         this.pos = part.getPos();
     }
 
-    public Boolean isCollidingWithOtherPart(SnakeBodyPart other){
-//        if(other.getPos().getX() == this.getPos().getX() && other.getPos().getY() == this.getPos().getY()) {
-//            return true;
-//        }
-//        return false;
-
-        return this.equals(other);
+    public Boolean equals(SnakeBodyPart other){
+        if(other.getPos().getX() == this.getPos().getX() && other.getPos().getY() == this.getPos().getY()) {
+            return true;
+        }
+        return false;
     }
 
     public Boolean equals(Pickup other){

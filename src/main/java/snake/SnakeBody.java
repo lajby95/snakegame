@@ -56,7 +56,7 @@ public class SnakeBody {
         Boolean collides = false;
 
         for (int i = 1; i < size(); i++) {
-            if(this.get(i).isCollidingWithOtherPart(this.get(0))) {
+            if(this.get(i).equals(this.get(0))) {
                 collides = true;
                 break;
             }
