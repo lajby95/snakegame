@@ -1,6 +1,5 @@
 package snake;
 
-import javafx.geometry.Point2D;
 import lombok.Getter;
 
 import java.awt.*;
@@ -11,19 +10,17 @@ public class Pickups {
     Vector<Pickup> pickups = new Vector<Pickup>();
 
     @Getter
-    long lastPlacement;
+    long lastPlacementTime;
+    @Getter
+    long lastEatenTime;
 
     public Pickups(){
 
     }
 
-    public void place(Point point, String type){
-        pickups.add(new Pickup(point, type));
-        lastPlacement = System.currentTimeMillis();
-    }
-    public void place(int x, int y, String type){
-        pickups.add(new Pickup(new Point(x,y), type));
-        lastPlacement = System.currentTimeMillis();
+    public void place(Pickup p){
+        pickups.add(p);
+        lastPlacementTime = System.currentTimeMillis();
     }
 
     public Pickup get(int i){
@@ -58,6 +55,7 @@ public class Pickups {
     }
 
     public Pickup eat(int i){
+        lastEatenTime = System.currentTimeMillis();
         return pickups.remove(i);
     }
 }

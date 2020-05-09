@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import snake.*;
 
@@ -22,7 +24,8 @@ public class GameController implements Initializable {
 
     private AnimationTimer gameTimer;
 
-    int updateInterval = 300;
+    public static final double originalUpdateInterval = 300;
+    double updateInterval = originalUpdateInterval;
 
     char dir = 'u';
 
@@ -46,11 +49,7 @@ public class GameController implements Initializable {
         snake.body.place(17,17);
         snake.body.extend();
         snake.body.extend();
-        snake.body.extend();
-        snake.body.extend();
-        snake.body.extend();
-        snake.body.extend();
-        snake.pickups.place(10, 10, "apple");
+//        snake.pickups.place(new Pickup(10, 10, "apple"));
         initRectArray();
         initGameLoop();
     }
@@ -101,6 +100,21 @@ public class GameController implements Initializable {
         return (Rectangle)gameArea.getChildren().get(posX*sizeX+posY);
     }
 
+
+    public void drawAllPickups(){
+        for(Pickup p : snake.pickups.getAll()) {
+            Rectangle r = getRect(p.getPos().x, p.getPos().y);
+            if(p.getType().equals("apple")) {
+                r.setFill(Color.RED);
+            } else if(p.getType().equals("speedup")) {
+                r.setFill(Color.CYAN);
+            } else if(p.getType().equals("slowdown")) {
+                r.setFill(Color.BLUE);
+            } else if(p.getType().equals("size1")) {
+                r.setFill(Color.YELLOWGREEN);
+            }
+        }
+    }
     public void drawAllPickupsOfType(String type){
         for(Pickup p : snake.pickups.getAll(type)) {
             Rectangle r = getRect(p.getPos().x, p.getPos().y);
@@ -115,8 +129,7 @@ public class GameController implements Initializable {
             ((Rectangle)r).setFill(Color.WHITE);
         });
 
-        // TODO draw pickups
-        drawAllPickupsOfType("apple");
+        drawAllPickups();
 
         float shade = 0.0f;
         for (int i = 0; i < snake.body.size(); i++) {
@@ -135,10 +148,44 @@ public class GameController implements Initializable {
         double interval = 3;
 
         long currentTimestamp = System.currentTimeMillis();
-        if(currentTimestamp >= (snake.pickups.getLastPlacement()+interval*1000)) {
+        if(
+                currentTimestamp >= (snake.pickups.getLastPlacementTime()+interval*1000)
+                && currentTimestamp >= (snake.pickups.getLastEatenTime()+interval*1000)
+        ) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void pickupEffect(Pickup p){
+        if(p.getType().equals("apple")) {
+            snake.body.extend();
+        } else if(p.getType().equals("speedup")) {
+            updateInterval = 300 * 0.5f;
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
+            delay.setOnFinished(event -> {
+                updateInterval = originalUpdateInterval;
+            });
+            delay.play();
+        } else if(p.getType().equals("slowdown")) {
+            updateInterval = 300 * 1.5f;
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
+            delay.setOnFinished(event -> {
+                updateInterval = originalUpdateInterval;
+            });
+            delay.play();
+        } else if(p.getType().equals("size1")) {
+            int originalSize = snake.body.size();
+            snake.body.setSnakeLength(1);
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
+            delay.setOnFinished(event -> {
+                snake.body.setSnakeLength(originalSize);
+            });
+            delay.play();
         }
     }
 
@@ -146,7 +193,7 @@ public class GameController implements Initializable {
         snake.move();
         Pickup lastEaten = snake.popLastEaten();
         if(!lastEaten.getType().equals("empty")) {
-            snake.pickupEffect(lastEaten);
+            pickupEffect(lastEaten);
         }
     }
 

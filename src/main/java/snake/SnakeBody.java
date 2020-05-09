@@ -34,6 +34,16 @@ public class SnakeBody {
         body.add(tail);
         log.info("Snake extended, new size is {}", body.size());
     }
+    public void shrink(){
+        if(!snakePlaced) {
+            log.error("Snake is not placed yet, can't extend!");
+            return;
+        }
+        if(body.size() <= 1) {
+            return;
+        }
+        body.remove(body.lastElement());
+    }
     public void place(int x, int y){
         if(snakePlaced) {
             log.error("Snake is already placed!");
@@ -65,18 +75,19 @@ public class SnakeBody {
         return collides;
     }
 
-//    public Boolean isSnakeAt(int x, int y){
-//        Boolean collides = false;
-//
-//        for (int i = 0; i < size(); i++) {
-//            if(this.get(i).getPos().getX() == x && this.get(i).getPos().getY() == y) {
-//                collides = true;
-//                break;
-//            }
-//        }
-//
-//        return collides;
-//    }
+    public void setSnakeLength(int length){
+        if(length < 1) {
+            log.error("Can't set Snake's length to 0 or lower!");
+            return;
+        }
+        while(body.size() != length) {
+            if(body.size() < length) {
+                extend();
+            } else if(body.size() > length) {
+                shrink();
+            }
+        }
+    }
 
     public int size(){
         return body.size();
