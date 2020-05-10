@@ -18,13 +18,14 @@ import snake.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 @Slf4j
 public class GameController implements Initializable {
 
     private AnimationTimer gameTimer;
 
-    public static final double originalUpdateInterval = 300;
+    public double originalUpdateInterval;
     double updateInterval = originalUpdateInterval;
 
     char dir = 'u';
@@ -49,14 +50,15 @@ public class GameController implements Initializable {
         snake.body.place(17,17);
         snake.body.extend();
         snake.body.extend();
-//        snake.pickups.place(new Pickup(10, 10, "apple"));
         initRectArray();
         initGameLoop();
     }
 
-    public void initListeners(Stage stage, Scene scene){
+    public void initListeners(Stage stage, Scene scene, double originalUpdateInterval){
         this.stage = stage;
         this.scene = scene;
+        this.originalUpdateInterval = originalUpdateInterval;
+        this.updateInterval = originalUpdateInterval;
 
         this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -125,27 +127,29 @@ public class GameController implements Initializable {
     public void drawBoard(){
 //        int[][] board = snake.getBoard();
 
-        gameArea.getChildren().parallelStream().forEach(r -> {
-            ((Rectangle)r).setFill(Color.WHITE);
-        });
+        for (int i = 0; i < sizeX; i++) {
+            for (int j = 0; j < sizeY; j++) {
+                Rectangle r = getRect(i,j);
+                r.setFill(Color.WHITE);
+            }
+        }
 
         drawAllPickups();
 
-        float shade = 0.0f;
         for (int i = 0; i < snake.body.size(); i++) {
-            Color color = Color.color(shade, shade, shade);
-            if(shade < 0.8f && i<5) {
-                shade += 0.1f;
-            }
             SnakeBodyPart part = snake.body.get(i);
             Rectangle r = getRect(part.getPos().x, part.getPos().y);
-            r.setFill(color);
+            if(i%3==0) {
+                r.setFill(Color.BLACK);
+            } else if(i%3==1 || i%3==2) {
+                r.setFill(Color.DARKGREEN);
+            }
         }
 
     }
 
     public Boolean canPlacePickup(){
-        double interval = 3;
+        double interval = 3;            // seconds
 
         long currentTimestamp = System.currentTimeMillis();
         if(
@@ -202,9 +206,6 @@ public class GameController implements Initializable {
             private long lastUpdate = 0;
             @Override
             public void handle(long now){
-                if(canPlacePickup()) {
-                    snake.placeRandomPickup();
-                }
                 if(now - lastUpdate >= updateInterval*1000*1000) {
                     if(dir != snake.getDirection()) {
                         snake.setDirection(dir);
@@ -213,6 +214,9 @@ public class GameController implements Initializable {
                     drawBoard();
 
                     lastUpdate = now;
+                }
+                if(canPlacePickup()) {
+                    snake.placeRandomPickup();
                 }
             }
         };

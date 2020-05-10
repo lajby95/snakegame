@@ -154,6 +154,11 @@ public class Snake {
         }
         log.info("Snake head position: ({},{})", head.getPos().x, head.getPos().y);
 
+//        log.info("------------- body parts ----------------------");
+//        for (int i = 0; i < body.size(); i++) {
+//            log.info(i+". bodypart: ({},{})", body.get(i).getPos().x, body.get(i).getPos().y);
+//        }
+
         if(body.isHeadCollidingWithBody()) {
             log.info("Snake Collision with itself!");
         }
@@ -179,6 +184,10 @@ public class Snake {
                 pickups.place(new Pickup(emptyCells.get(randomIndex), "size1", true, 15));
             }
         }
+
+//        for (int i = 0; i < pickups.getAll().size(); i++) {
+//            log.info("Pickup at ({},{})", pickups.get(i).getPos().x, pickups.get(i).getPos().y);
+//        }
     }
 
     public int getPickupIndexCollidingWithHead(){

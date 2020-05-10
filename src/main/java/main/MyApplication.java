@@ -16,7 +16,7 @@ public class MyApplication extends Application {
         GameController controller = (GameController)loader.getController();
         Scene scene = new Scene(root);
 
-        controller.initListeners(stage, scene);      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
+        controller.initListeners(stage, scene, 200);      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
 
         stage.setTitle("Snake Game");
         stage.setResizable(true);
