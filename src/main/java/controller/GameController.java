@@ -4,7 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -17,6 +19,7 @@ import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import snake.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -52,8 +55,7 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
         snake.body.place(17,17);
-        snake.body.extend();
-        snake.body.extend();
+        snake.body.setSnakeLength(100);
         initRectArray();
         initGameLoop();
     }
@@ -199,10 +201,58 @@ public class GameController implements Initializable {
 
     public void moveSnake(){
         snake.move();
+        if(snake.body.isHeadCollidingWithBody()) {
+            try {
+                die();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         Pickup lastEaten = snake.popLastEaten();
         if(!lastEaten.getType().equals("empty")) {
             pickupEffect(lastEaten);
         }
+    }
+
+    public void die() throws IOException {
+        gameTimer.stop();
+
+        float dieAnimationInterval = 2000/(float)snake.body.size();
+
+        AnimationTimer dieTimer = new AnimationTimer(){
+            private long lastUpdate = 0;
+            @Override
+            public void handle(long now){
+                if(now - lastUpdate >= dieAnimationInterval*1000*1000) {
+                    if(snake.body.size() > 1) {
+                        snake.body.shrink();
+                        drawBoard();
+                    } else {
+                        this.stop();
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameover.fxml"));
+                        Parent root = null;
+                        try {
+                            root = (Parent)loader.load();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        GameOverController controller = (GameOverController)loader.getController();
+                        Scene scene = new Scene(root);
+
+                        controller.init(snake.getPoints());      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
+
+                        stage.setTitle("Game Over!");
+                        stage.setResizable(false);
+
+                        stage.setScene(scene);
+                        stage.show();
+                    }
+                    lastUpdate = now;
+                }
+            }
+        };
+        dieTimer.start();
     }
 
     private void initGameLoop(){
