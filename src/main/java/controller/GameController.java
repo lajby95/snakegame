@@ -172,7 +172,7 @@ public class GameController implements Initializable {
         if(p.getType().equals("apple")) {
             snake.body.extend();
         } else if(p.getType().equals("speedup")) {
-            updateInterval = 300 * 0.5f;
+            updateInterval = originalUpdateInterval * 0.5f;
 
             PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
             delay.setOnFinished(event -> {
@@ -180,7 +180,7 @@ public class GameController implements Initializable {
             });
             delay.play();
         } else if(p.getType().equals("slowdown")) {
-            updateInterval = 300 * 1.5f;
+            updateInterval = originalUpdateInterval * 1.5f;
 
             PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
             delay.setOnFinished(event -> {
