@@ -11,6 +11,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,9 @@ public class GameController implements Initializable {
     private AnchorPane gameArea;
 
     Rectangle rectangles[][] = new Rectangle[sizeX][sizeY];
+
+    @FXML
+    Text pointsText;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -214,6 +218,8 @@ public class GameController implements Initializable {
                     drawBoard();
 
                     lastUpdate = now;
+
+                    pointsText.setText(Integer.toString(snake.getPoints()));
                 }
                 if(canPlacePickup()) {
                     snake.placeRandomPickup();

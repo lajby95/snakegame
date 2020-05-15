@@ -1,6 +1,7 @@
 package snake;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
@@ -14,6 +15,13 @@ public class Snake {
     private int sizeX = 37;
     @Getter
     private int sizeY = 37;
+
+    @Getter
+    private int points = 0;
+
+    public void addPoints(int p){
+        points += p;
+    }
 
 //    @Getter
 //    private int[][] board = new int[sizeX][sizeY];
@@ -166,6 +174,7 @@ public class Snake {
         int pickupIndexCollidingWithHead = getPickupIndexCollidingWithHead();
         if(pickupIndexCollidingWithHead != -1) {
             lastEatenPickup = pickups.eat(pickupIndexCollidingWithHead);
+            addPoints(lastEatenPickup.getPoints());
             log.info("Snake has eaten a(n) {}", lastEatenPickup.getType());
         }
     }
@@ -175,13 +184,13 @@ public class Snake {
         if(emptyCells.size() > 0) {
             int randomIndex = ThreadLocalRandom.current().nextInt(0, emptyCells.size());
             if(pickups.getCountOfType("apple") < 3) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "apple"));
+                pickups.place(new Pickup(emptyCells.get(randomIndex), "apple", false, 0, 100));
             } else if(pickups.getCountOfType("speedup") < 2) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "speedup", true, 10));
+                pickups.place(new Pickup(emptyCells.get(randomIndex), "speedup", true, 10, 500));
             } else if(pickups.getCountOfType("slowdown") < 1) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "slowdown", true, 10));
+                pickups.place(new Pickup(emptyCells.get(randomIndex), "slowdown", true, 10, 50));
             } else if(pickups.getCountOfType("size1") < 1) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "size1", true, 15));
+                pickups.place(new Pickup(emptyCells.get(randomIndex), "size1", true, 15, 50));
             }
         }
 
