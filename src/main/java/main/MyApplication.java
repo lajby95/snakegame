@@ -10,18 +10,9 @@ import javafx.stage.Stage;
 public class MyApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/fxml/game.fxml"));
-        Parent root = (Parent)loader.load();
-
-        GameController controller = (GameController)loader.getController();
-        Scene scene = new Scene(root);
-
-        controller.initListeners(stage, scene, 100);      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
-
-        stage.setTitle("Snake Game");
-        stage.setResizable(true);
-
-        stage.setScene(scene);
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainmenu.fxml"));
+//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
         stage.show();
     }
 }

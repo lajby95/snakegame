@@ -54,13 +54,14 @@
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
             <Button fx:id="playbutton" layoutX="297.0" layoutY="127.0" mnemonicParsing="false" onAction="#switchToGame" text="Play" />
-            <Button fx:id="highscorebutton" layoutX="276.0" layoutY="160.0" mnemonicParsing="false" text="High Score" />
+            <Button fx:id="highscorebutton" layoutX="276.0" layoutY="208.0" mnemonicParsing="false" text="High Score" />
             <Label layoutX="244.0" layoutY="30.0" text="Snake Game">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
             <Label layoutX="274.0" layoutY="78.0" text="by Lajos Nagy" />
+            <Button fx:id="difficultyButton" layoutX="252.0" layoutY="160.0" mnemonicParsing="false" onAction="#nextDifficulty" text="Difficulty: medium" />
       </children>
     </AnchorPane>
   </children>

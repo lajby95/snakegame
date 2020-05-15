@@ -77,10 +77,18 @@ public class GameController implements Initializable {
         }
     }
 
-    public void initListeners(Stage stage, Scene scene, double originalUpdateInterval){
+    public void initListeners(Stage stage, Scene scene, String difficulty){
         this.stage = stage;
         this.scene = scene;
-        this.originalUpdateInterval = originalUpdateInterval;
+        if(difficulty.equals("easy")) {
+            this.originalUpdateInterval = 300;
+        } else if(difficulty.equals("medium")) {
+            this.originalUpdateInterval = 200;
+        } else if(difficulty.equals("hard")) {
+            this.originalUpdateInterval = 100;
+        } else {
+            this.originalUpdateInterval = 200;
+        }
         this.updateInterval = originalUpdateInterval;
 
         this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
