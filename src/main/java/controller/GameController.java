@@ -34,6 +34,9 @@ public class GameController implements Initializable {
 
     char dir = 'u';
 
+    public Boolean paused = false;
+    public Boolean died = false;
+
     Stage stage;
     Scene scene;
 
@@ -52,12 +55,26 @@ public class GameController implements Initializable {
     @FXML
     Text pointsText;
 
+    @FXML
+    Text pausedText;
+
     @Override
     public void initialize(URL location, ResourceBundle resources){
         snake.body.place(17,17);
         snake.body.setSnakeLength(100);
         initRectArray();
         initGameLoop();
+    }
+
+    public void pauseGame(){
+        paused = !paused;
+        if(paused) {
+            gameTimer.stop();
+            pausedText.setVisible(true);
+        } else {
+            gameTimer.start();
+            pausedText.setVisible(false);
+        }
     }
 
     public void initListeners(Stage stage, Scene scene, double originalUpdateInterval){
@@ -69,6 +86,9 @@ public class GameController implements Initializable {
         this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                if(died) {
+                    return;
+                }
                 if(event.getCode() == KeyCode.UP) {
                     dir = 'u';
                 } else if(event.getCode() == KeyCode.DOWN) {
@@ -77,6 +97,8 @@ public class GameController implements Initializable {
                     dir = 'l';
                 } else if(event.getCode() == KeyCode.RIGHT) {
                     dir = 'r';
+                } else if(event.getCode() == KeyCode.ESCAPE) {
+                    pauseGame();
                 }
             }
         });
@@ -214,7 +236,29 @@ public class GameController implements Initializable {
         }
     }
 
+    public void switchToGameOverWindow(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameover.fxml"));
+        Parent root = null;
+        try {
+            root = (Parent)loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        GameOverController controller = (GameOverController)loader.getController();
+        Scene scene = new Scene(root);
+
+        controller.init(snake.getPoints());      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
+
+        stage.setTitle("Game Over!");
+        stage.setResizable(false);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void die() throws IOException {
+        died = true;
         gameTimer.stop();
 
         float dieAnimationInterval = 2000/(float)snake.body.size();
@@ -229,24 +273,7 @@ public class GameController implements Initializable {
                         drawBoard();
                     } else {
                         this.stop();
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameover.fxml"));
-                        Parent root = null;
-                        try {
-                            root = (Parent)loader.load();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        GameOverController controller = (GameOverController)loader.getController();
-                        Scene scene = new Scene(root);
-
-                        controller.init(snake.getPoints());      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
-
-                        stage.setTitle("Game Over!");
-                        stage.setResizable(false);
-
-                        stage.setScene(scene);
-                        stage.show();
+                        switchToGameOverWindow();
                     }
                     lastUpdate = now;
                 }
