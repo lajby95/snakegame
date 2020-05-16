@@ -34,6 +34,11 @@ public class GameController implements Initializable {
 
     char dir = 'u';
 
+    private int snakeLength;        // A játék végén ide tároljuk el, hogy a halálkor milyen hosszú volt a kígyó
+
+    private long startTimestamp;
+    private long endTimestamp;
+
     public Boolean paused = false;
     public Boolean died = false;
 
@@ -60,8 +65,9 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
+        startTimestamp = System.currentTimeMillis();
         snake.body.place(17,17);
-        snake.body.setSnakeLength(100);
+        snake.body.setSnakeLength(10);
         initRectArray();
         initGameLoop();
     }
@@ -246,27 +252,36 @@ public class GameController implements Initializable {
 
     public void switchToGameOverWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameover.fxml"));
-        Parent root = null;
         try {
-            root = (Parent)loader.load();
+            Parent root = (Parent)loader.load();
+            GameOverController controller = (GameOverController)loader.getController();
+            Scene scene = new Scene(root);
+
+            int timeSurvivedSeconds = Math.round((float)(endTimestamp-startTimestamp)/1000);
+            log.info("Time survived in seconds: {}", timeSurvivedSeconds);
+
+            GameResult result = new GameResult();
+            result.setNumOfPickups(snake.pickups.getPickupsEaten());
+            result.setScore(snake.getPoints());
+            result.setSnakeLength(snakeLength);
+            result.setTimeSurvived(timeSurvivedSeconds);
+
+            controller.init(result);      // eredmény átadása a GameOver controllernek
+
+            stage.setTitle("Game Over!");
+            stage.setResizable(false);
+
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        GameOverController controller = (GameOverController)loader.getController();
-        Scene scene = new Scene(root);
-
-        controller.init(snake.getPoints());      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni
-
-        stage.setTitle("Game Over!");
-        stage.setResizable(false);
-
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void die() throws IOException {
         died = true;
+        endTimestamp = System.currentTimeMillis();
+        snakeLength = snake.body.size();
         gameTimer.stop();
 
         float dieAnimationInterval = 2000/(float)snake.body.size();

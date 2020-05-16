@@ -27,8 +27,8 @@
                </font>
             </Text>
             <Text layoutX="114.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter player name: " />
-            <TextField layoutX="258.0" layoutY="140.0" />
-            <Button layoutX="289.0" layoutY="193.0" mnemonicParsing="false" text="Submit" />
+            <TextField fx:id="playerNameInput" layoutX="258.0" layoutY="140.0" />
+            <Button layoutX="289.0" layoutY="193.0" mnemonicParsing="false" onAction="#submitResultAndSwitchToMainMenu" text="Submit" />
       </children>
     </AnchorPane>
   </children>

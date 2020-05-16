@@ -14,6 +14,9 @@ public class Pickups {
     @Getter
     long lastEatenTime;
 
+    @Getter
+    private int pickupsEaten = 0;
+
     public Pickups(){
 
     }
@@ -56,6 +59,7 @@ public class Pickups {
 
     public Pickup eat(int i){
         lastEatenTime = System.currentTimeMillis();
+        pickupsEaten++;
         return pickups.remove(i);
     }
 }
