@@ -62,4 +62,18 @@ public class Pickups {
         pickupsEaten++;
         return pickups.remove(i);
     }
+
+    public Boolean canPlacePickup(){
+        double interval = 3;            // seconds
+
+        long currentTimestamp = System.currentTimeMillis();
+        if(
+                currentTimestamp >= (this.getLastPlacementTime()+interval*1000)
+                && currentTimestamp >= (this.getLastEatenTime()+interval*1000)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

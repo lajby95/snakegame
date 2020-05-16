@@ -190,20 +190,6 @@ public class GameController implements Initializable {
 
     }
 
-    public Boolean canPlacePickup(){
-        double interval = 3;            // seconds
-
-        long currentTimestamp = System.currentTimeMillis();
-        if(
-                currentTimestamp >= (snake.pickups.getLastPlacementTime()+interval*1000)
-                && currentTimestamp >= (snake.pickups.getLastEatenTime()+interval*1000)
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public void pickupEffect(Pickup p){
         if(p.getType().equals("apple")) {
             snake.body.extend();
@@ -321,7 +307,7 @@ public class GameController implements Initializable {
 
                     pointsText.setText(Integer.toString(snake.getPoints()));
                 }
-                if(canPlacePickup()) {
+                if(snake.pickups.canPlacePickup()) {
                     snake.placeRandomPickup();
                 }
             }
