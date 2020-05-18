@@ -186,14 +186,17 @@ public class Snake {
         Vector<Point> emptyCells = getEmptyCellsOfBoard();
         if(emptyCells.size() > 0) {
             int randomIndex = ThreadLocalRandom.current().nextInt(0, emptyCells.size());
-            if(pickups.getCountOfType("apple") < 3) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "apple", false, 0, 100));
-            } else if(pickups.getCountOfType("speedup") < 2) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "speedup", true, 10, 500));
-            } else if(pickups.getCountOfType("slowdown") < 1) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "slowdown", true, 10, 50));
-            } else if(pickups.getCountOfType("size1") < 1) {
-                pickups.place(new Pickup(emptyCells.get(randomIndex), "size1", true, 15, 50));
+            String nextRandomPickup = pickups.getNextRandomPlaceablePickup();
+            if(!nextRandomPickup.equals("")) {
+                pickups.place(
+                        new Pickup(
+                                emptyCells.get(randomIndex),
+                                nextRandomPickup,
+                                pickups.getEffectTimers().get(nextRandomPickup),
+                                pickups.getEffectDurations().get(nextRandomPickup),
+                                pickups.getPoints().get(nextRandomPickup)
+                        )
+                );
             }
         }
 
