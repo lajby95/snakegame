@@ -6,7 +6,22 @@
 
     <groupId>hu.unideb.inf</groupId>
     <artifactId>snakegame</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
+    <description>
+        Here is the classic Snake game, in the spirit of the original Nokia mobile game, with a few additions, like different types of pickups.
+    </description>
+    <developers>
+        <developer>
+            <id>lajby95</id>
+            <name>Nagy Lajos</name>
+            <email>lajby95@gmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>https://github.com/lajby95/snakegame.git</connection>
+        <developerConnection>https://github.com/lajby95/snakegame.git</developerConnection>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
