@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,6 +19,8 @@ public class Snake {
 
     @Getter
     private int points = 0;
+
+    public ArrayList<String> pickupsDisabled = new ArrayList<String>();
 
     public void addPoints(int p){
         points += p;
@@ -172,7 +175,7 @@ public class Snake {
         }
 
         int pickupIndexCollidingWithHead = getPickupIndexCollidingWithHead();
-        if(pickupIndexCollidingWithHead != -1) {
+        if(pickupIndexCollidingWithHead != -1 && !pickupsDisabled.contains(pickups.get(pickupIndexCollidingWithHead).getType())) {
             lastEatenPickup = pickups.eat(pickupIndexCollidingWithHead);
             addPoints(lastEatenPickup.getPoints());
             log.info("Snake has eaten a(n) {}", lastEatenPickup.getType());

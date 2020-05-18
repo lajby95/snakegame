@@ -147,6 +147,9 @@ public class GameController implements Initializable {
 
     public void drawAllPickups(){
         for(Pickup p : snake.pickups.getAll()) {
+            if(snake.pickupsDisabled.contains(p.getType())) {
+                continue;
+            }
             Rectangle r = getRect(p.getPos().x, p.getPos().y);
             if(p.getType().equals("apple")) {
                 r.setFill(Color.RED);
@@ -194,28 +197,40 @@ public class GameController implements Initializable {
         if(p.getType().equals("apple")) {
             snake.body.extend();
         } else if(p.getType().equals("speedup")) {
+            snake.pickupsDisabled.add("slowdown");
+            snake.pickupsDisabled.add("speedup");
             updateInterval = originalUpdateInterval * 0.5f;
 
             PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
             delay.setOnFinished(event -> {
                 updateInterval = originalUpdateInterval;
+                snake.pickupsDisabled.remove("slowdown");
+                snake.pickupsDisabled.remove("speedup");
             });
             delay.play();
         } else if(p.getType().equals("slowdown")) {
+            snake.pickupsDisabled.add("slowdown");
+            snake.pickupsDisabled.add("speedup");
             updateInterval = originalUpdateInterval * 1.5f;
 
             PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
             delay.setOnFinished(event -> {
                 updateInterval = originalUpdateInterval;
+                snake.pickupsDisabled.remove("slowdown");
+                snake.pickupsDisabled.remove("speedup");
             });
             delay.play();
         } else if(p.getType().equals("size1")) {
+            snake.pickupsDisabled.add("apple");
+            snake.pickupsDisabled.add("size1");
             int originalSize = snake.body.size();
             snake.body.setSnakeLength(1);
 
             PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));
             delay.setOnFinished(event -> {
                 snake.body.setSnakeLength(originalSize);
+                snake.pickupsDisabled.remove("apple");
+                snake.pickupsDisabled.remove("size1");
             });
             delay.play();
         }
