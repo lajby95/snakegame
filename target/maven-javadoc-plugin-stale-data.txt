@@ -1,0 +1,92 @@
+/home/lajby/.sdkman/candidates/java/current/bin/javadoc
+@options
+@packages
+-classpath
+'/home/lajby/.m2/repository/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.jar:/home/lajby/.m2/repository/org/apache/logging/log4j/log4j-slf4j-impl/2.11.2/log4j-slf4j-impl-2.11.2.jar:/home/lajby/.m2/repository/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar:/home/lajby/.m2/repository/org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2.jar:/home/lajby/.m2/repository/org/openjfx/javafx-controls/11.0.2/javafx-controls-11.0.2.jar:/home/lajby/.m2/repository/org/openjfx/javafx-controls/11.0.2/javafx-controls-11.0.2-linux.jar:/home/lajby/.m2/repository/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2.jar:/home/lajby/.m2/repository/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2-linux.jar:/home/lajby/.m2/repository/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2.jar:/home/lajby/.m2/repository/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2-linux.jar:/home/lajby/.m2/repository/org/openjfx/javafx-fxml/11.0.2/javafx-fxml-11.0.2.jar:/home/lajby/.m2/repository/org/openjfx/javafx-fxml/11.0.2/javafx-fxml-11.0.2-linux.jar:/home/lajby/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar:/home/lajby/.m2/repository/org/jdbi/jdbi3-core/3.12.2/jdbi3-core-3.12.2.jar:/home/lajby/.m2/repository/org/antlr/antlr4-runtime/4.7.2/antlr4-runtime-4.7.2.jar:/home/lajby/.m2/repository/io/leangen/geantyref/geantyref/1.3.7/geantyref-1.3.7.jar:/home/lajby/.m2/repository/com/github/ben-manes/caffeine/caffeine/2.8.0/caffeine-2.8.0.jar:/home/lajby/.m2/repository/org/checkerframework/checker-qual/2.10.0/checker-qual-2.10.0.jar:/home/lajby/.m2/repository/org/jdbi/jdbi3-sqlobject/3.12.2/jdbi3-sqlobject-3.12.2.jar:/home/lajby/.m2/repository/com/h2database/h2/1.4.200/h2-1.4.200.jar:/home/lajby/.m2/repository/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar:/home/lajby/.m2/repository/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar:/home/lajby/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.6.2/junit-jupiter-engine-5.6.2.jar:/home/lajby/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/lajby/.m2/repository/org/junit/platform/junit-platform-engine/1.6.2/junit-platform-engine-1.6.2.jar:/home/lajby/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/lajby/.m2/repository/org/junit/platform/junit-platform-commons/1.6.2/junit-platform-commons-1.6.2.jar:/home/lajby/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.6.2/junit-jupiter-api-5.6.2.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2020. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'snakegame 1.0 API'
+-linkoffline
+'https://docs.oracle.com/en/java/javase/11/docs/api' '/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'snakegame 1.0 API'
+controller
+controller
+controller
+controller
+main
+main
+main
+results
+results
+results
+snake
+snake
+snake
+snake
+snake
+snake
+/home/lajby/.m2/repository/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.jar = 1588356779525
+/home/lajby/.m2/repository/org/apache/logging/log4j/log4j-slf4j-impl/2.11.2/log4j-slf4j-impl-2.11.2.jar = 1588356779717
+/home/lajby/.m2/repository/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar = 1588356780277
+/home/lajby/.m2/repository/org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2.jar = 1588356781365
+/home/lajby/.m2/repository/org/openjfx/javafx-controls/11.0.2/javafx-controls-11.0.2.jar = 1588356784041
+/home/lajby/.m2/repository/org/openjfx/javafx-controls/11.0.2/javafx-controls-11.0.2-linux.jar = 1588356784097
+/home/lajby/.m2/repository/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2.jar = 1588356783221
+/home/lajby/.m2/repository/org/openjfx/javafx-graphics/11.0.2/javafx-graphics-11.0.2-linux.jar = 1588356784901
+/home/lajby/.m2/repository/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2.jar = 1588356783333
+/home/lajby/.m2/repository/org/openjfx/javafx-base/11.0.2/javafx-base-11.0.2-linux.jar = 1588356784249
+/home/lajby/.m2/repository/org/openjfx/javafx-fxml/11.0.2/javafx-fxml-11.0.2.jar = 1588356783621
+/home/lajby/.m2/repository/org/openjfx/javafx-fxml/11.0.2/javafx-fxml-11.0.2-linux.jar = 1588356783901
+/home/lajby/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar = 1588001040221
+/home/lajby/.m2/repository/org/jdbi/jdbi3-core/3.12.2/jdbi3-core-3.12.2.jar = 1589565021715
+/home/lajby/.m2/repository/org/antlr/antlr4-runtime/4.7.2/antlr4-runtime-4.7.2.jar = 1588356843341
+/home/lajby/.m2/repository/io/leangen/geantyref/geantyref/1.3.7/geantyref-1.3.7.jar = 1589565020499
+/home/lajby/.m2/repository/com/github/ben-manes/caffeine/caffeine/2.8.0/caffeine-2.8.0.jar = 1589565021167
+/home/lajby/.m2/repository/org/checkerframework/checker-qual/2.10.0/checker-qual-2.10.0.jar = 1589565020535
+/home/lajby/.m2/repository/org/jdbi/jdbi3-sqlobject/3.12.2/jdbi3-sqlobject-3.12.2.jar = 1589565020755
+/home/lajby/.m2/repository/com/h2database/h2/1.4.200/h2-1.4.200.jar = 1588001040241
+/home/lajby/.m2/repository/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar = 1588356785209
+/home/lajby/.m2/repository/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar = 1588356785373
+/home/lajby/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.6.2/junit-jupiter-engine-5.6.2.jar = 1589667435068
+/home/lajby/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar = 1589667435576
+/home/lajby/.m2/repository/org/junit/platform/junit-platform-engine/1.6.2/junit-platform-engine-1.6.2.jar = 1589667435352
+/home/lajby/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar = 1589667435712
+/home/lajby/.m2/repository/org/junit/platform/junit-platform-commons/1.6.2/junit-platform-commons-1.6.2.jar = 1589667435816
+/home/lajby/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.6.2/junit-jupiter-api-5.6.2.jar = 1589667435656
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/src/main/java = 1589885887495
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/allclasses.html = 1589998000990
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/stylesheet.css = 1589998001014
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/package-search-index.js = 1589998000902
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/index.html = 1589998000998
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/index-all.html = 1589998000930
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/type-search-index.zip = 1589998000918
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/element-list = 1589998000606
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/package-search-index.zip = 1589998000918
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/allpackages-index.html = 1589998000958
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/overview-tree.html = 1589998000842
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/deprecated-list.html = 1589998000974
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/search.js = 1589998001026
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/allclasses-index.html = 1589998000954
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/type-search-index.js = 1589998000918
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/help-doc.html = 1589998001006
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/script.js = 1589998001014
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/member-search-index.zip = 1589998000930
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/overview-summary.html = 1589998001002
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/constant-values.html = 1589998000702
+/home/lajby/DE-IK 2019-20-2/Progtech/Hazi_projekt/snakegame/target/site/apidocs/member-search-index.js = 1589998000926

@@ -17,12 +17,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import results.GameResult;
 import snake.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 @Slf4j
 public class GameController implements Initializable {
@@ -40,7 +40,6 @@ public class GameController implements Initializable {
     private long endTimestamp;
 
     public Boolean paused = false;
-    public Boolean died = false;
 
     Stage stage;
     Scene scene;
@@ -100,7 +99,7 @@ public class GameController implements Initializable {
         this.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(died) {
+                if(snake.getDied()) {
                     return;
                 }
                 if(event.getCode() == KeyCode.UP) {
@@ -238,7 +237,7 @@ public class GameController implements Initializable {
 
     public void moveSnake(){
         snake.move();
-        if(snake.body.isHeadCollidingWithBody()) {
+        if(snake.getDied()) {
             try {
                 die();
             } catch (IOException e) {
@@ -280,7 +279,6 @@ public class GameController implements Initializable {
     }
 
     public void die() throws IOException {
-        died = true;
         endTimestamp = System.currentTimeMillis();
         snakeLength = snake.body.size();
         gameTimer.stop();

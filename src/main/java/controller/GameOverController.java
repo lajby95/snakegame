@@ -9,8 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import snake.GameResult;
-import snake.GameResultDao;
+import results.GameResult;
+import results.GameResultDao;
 
 import java.io.IOException;
 import java.util.List;

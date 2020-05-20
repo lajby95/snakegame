@@ -9,19 +9,48 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Class representing a Snake
+ */
 @Slf4j
 public class Snake {
 
+    /**
+     * Width of map
+     */
     @Getter
     private int sizeX = 37;
+
+    /**
+     * Height of map
+     */
     @Getter
     private int sizeY = 37;
 
+    /**
+     * Points earned by player
+     */
     @Getter
     private int points = 0;
 
+    /**
+     * Is Snake dead?
+     */
+    @Getter
+    private Boolean died = false;
+
+    /**
+     * List of pickups types that are disabled. For example, when eating a slowdown pickup, we don't want the player
+     * to be able to eat another slowdown pickup while the effect is active, and we also don't want the player to
+     * eat a speedup pickup, since that would mean 2 pickups affecting speed are in effect at the same time.
+     */
     public ArrayList<String> pickupsDisabled = new ArrayList<String>();
 
+    /**
+     * Add points to player's points
+     *
+     * @param p points (int)
+     */
     public void addPoints(int p){
         points += p;
     }
@@ -29,25 +58,51 @@ public class Snake {
 //    @Getter
 //    private int[][] board = new int[sizeX][sizeY];
 
+    /**
+     * Stores pickups
+     */
     public Pickups pickups = new Pickups();
 
+    /**
+     * Stores pickup that was last eaten
+     */
     private Pickup lastEatenPickup = new Pickup(new Point(0,0),"empty");
+
+    /**
+     * returns {@code lastEatenPickup}, and then places the special "empty" pickup into {@code lastEatenPickup}
+     *
+     * @return {@code lastEatenPickup}
+     */
     public Pickup popLastEaten(){
         Pickup p = new Pickup(lastEatenPickup);
         lastEatenPickup = new Pickup(new Point(0,0), "empty");
         return p;
     }
 
+    /**
+     * Instantiates a {@code SnakeBody}
+     */
     public SnakeBody body = new SnakeBody();
 
 //    private Boolean snakePlaced = false;
 
+    /**
+     * Stores current direction the Snake is traveling
+     */
     @Getter
     private char direction = 'u';
 
+    /**
+     * Sets direction of the Snake
+     *
+     * If {@code dirNew} is the opposite of current {@code direction}, the direction is not changed. That would allow
+     * the Snake to turn around into itself, which means Game Over.
+     *
+     * @param dirNew new direction
+     */
     public void setDirection(char dirNew){
         if(!(dirNew == 'u' || dirNew == 'd' || dirNew == 'l' || dirNew == 'r')) {
-            return;
+            throw new IllegalArgumentException();
         }
         char dir = getDirection();
         if(dirNew == dir) {
@@ -74,10 +129,20 @@ public class Snake {
         log.info("direction changed to {}", d);
     }
 
+    /**
+     * Constructor that places Snake onto given position
+     *
+     * @param posX X coordinate
+     * @param posY Y coordinate
+     */
     public Snake(int posX, int posY){
 //        initTable();
         place(posX, posY);
     }
+
+    /**
+     * Empty constructor
+     */
     public Snake(){
 //        initTable();
     }
@@ -90,6 +155,17 @@ public class Snake {
 //        }
 //    }
 
+    /**
+     * Returns 2 dimensional int array of map. Values consist of:
+     *
+     * Empty cells = 0
+     *
+     * Pickups = 1
+     *
+     * Snake = 2
+     *
+     * @return int[][] array of map
+     */
     public int[][] getBoard(){
         int[][] board = new int[sizeX][sizeY];
 
@@ -114,6 +190,11 @@ public class Snake {
         return board;
     }
 
+    /**
+     * Returns Vector of positions of empty cells of map (no Snake body parts, no pickups)
+     *
+     * @return vector of positions of empty cells of map
+     */
     public Vector<Point> getEmptyCellsOfBoard(){
         Vector<Point> cells = new Vector<Point>();
 
@@ -130,13 +211,30 @@ public class Snake {
         return cells;
     }
 
+    /**
+     * Places snake onto given X and Y coordinates of map
+     *
+     * @param posX X coordinate
+     * @param posY Y coordinate
+     */
     public void place(int posX, int posY){
-        if(posX >= sizeX || posY >= sizeY) {
-            return;
+        if(posX >= sizeX || posY >= sizeY || posX < 0 || posY < 0) {
+            throw new IllegalArgumentException();
         }
         body.place(posX, posY);
     }
 
+    /**
+     * Moves Snake by 1 tile
+     *
+     * direction is determined by {@code direction} variable.
+     *
+     * If after move, Snake head collides with any other body part, Snake dies.
+     *
+     * After every move, it is checked if head is at position of any pickup. If true, then pickup is eaten, and
+     * points are added to player.
+     *
+     */
     public void move(){
         if(body.size() > 1) {
             for (int i = body.size()-1; i >= 1; i--) {
@@ -171,7 +269,8 @@ public class Snake {
 //        }
 
         if(body.isHeadCollidingWithBody()) {
-            log.info("Snake Collision with itself!");
+            log.info("Snake Collision with itself! Snake died!");
+            died = true;
         }
 
         int pickupIndexCollidingWithHead = getPickupIndexCollidingWithHead();
@@ -182,6 +281,9 @@ public class Snake {
         }
     }
 
+    /**
+     * Places random pickup to random empty cell.
+     */
     public void placeRandomPickup(){
         Vector<Point> emptyCells = getEmptyCellsOfBoard();
         if(emptyCells.size() > 0) {
@@ -205,6 +307,9 @@ public class Snake {
 //        }
     }
 
+    /**
+     * @return index of pickup that is at the same position as Snake's head, returns -1 if no collision
+     */
     public int getPickupIndexCollidingWithHead(){
         int in = -1;
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <AnchorPane fx:id="gameArea" layoutX="14.0" layoutY="45.0" prefHeight="307.0" prefWidth="358.0" style="-fx-background-color: lightgray;" />
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Points:" />
+            <Text fx:id="pointsText" layoutX="66.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+            <Text fx:id="pausedText" layoutX="209.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PAUSED... Press Esc to continue" visible="false">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>
