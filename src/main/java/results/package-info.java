@@ -1,4 +1,4 @@
 /**
- * Contains classes for managing game result database
+ * Contains classes for managing game result database.
  */
 package results;

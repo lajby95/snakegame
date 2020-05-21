@@ -1,4 +1,4 @@
 /**
- * Provides controller classes for the game
+ * Provides controller classes for the game.
  */
 package controller;

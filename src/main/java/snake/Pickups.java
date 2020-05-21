@@ -25,47 +25,47 @@ public class Pickups {
     long lastPlacementTime;
 
     /**
-     * When was the last pickup eaten
+     * When was the last pickup eaten.
      */
     @Getter
     long lastEatenTime;
 
     /**
-     * How many pickups were eaten
+     * How many pickups were eaten.
      */
     @Getter
     private int pickupsEaten = 0;
 
     /**
-     * Stores upper limits that can be placed of all types of pickups
+     * Stores upper limits that can be placed of all types of pickups.
      */
     HashMap<String, Integer> maxPickupCounts = new HashMap<String, Integer>();
 
     /**
-     * Stores how many pickups of all types are currently on the map
+     * Stores how many pickups of all types are currently on the map.
      */
     HashMap<String, Integer> countOfPickups = new HashMap<String, Integer>();
 
     /**
-     * Stores if effectTimers are enabled for given type of pickups
+     * Stores if effectTimers are enabled for given type of pickups.
      */
     @Getter
     HashMap<String, Boolean> effectTimers = new HashMap<String, Boolean>();
 
     /**
-     * Stores effectDurations for given type of pickups
+     * Stores effectDurations for given type of pickups.
      */
     @Getter
     HashMap<String, Integer> effectDurations = new HashMap<String, Integer>();
 
     /**
-     * Stores Points for given type of pickups
+     * Stores Points for given type of pickups.
      */
     @Getter
     HashMap<String, Integer> Points = new HashMap<String, Integer>();
 
     /**
-     * Initialize properties of all types of pickups
+     * Initialize properties of all types of pickups.
      */
     public Pickups(){
         maxPickupCounts.put("apple", 3);
@@ -97,7 +97,7 @@ public class Pickups {
     }
 
     /**
-     * Places a Pickup {@code p} on the map. The position is stored as the object's property
+     * Places a Pickup {@code p} on the map. The position is stored as the object's property.
      *
      * @param p Pickup
      */
@@ -108,7 +108,7 @@ public class Pickups {
     }
 
     /**
-     * Returns the i-th pickup from the vector of {@code pickups}
+     * Returns the i-th pickup from the vector of {@code pickups}.
      *
      * @param i index of pickup in vector of {@code pickups}
      * @return pickup
@@ -118,7 +118,7 @@ public class Pickups {
     }
 
     /**
-     * Returns vector of all pickups on the map
+     * Returns vector of all pickups on the map.
      *
      * @return vector of all pickups on the map
      */
@@ -127,7 +127,7 @@ public class Pickups {
     }
 
     /**
-     * Returns all pickups placed on map of {@code type}
+     * Returns all pickups placed on map of {@code type}.
      *
      * @param type of pickup
      * @return Vector of pickups
@@ -145,7 +145,7 @@ public class Pickups {
     }
 
     /**
-     * Returns the amount of pickups of {@code type} placed on map
+     * Returns the amount of pickups of {@code type} placed on map.
      *
      * @param type of pickups
      * @return count of pickups of {@code type}
@@ -162,7 +162,7 @@ public class Pickups {
     }
 
     /**
-     * Removes pickup from map (equivalent to Snake eating it), then updates time of last eaten pickup
+     * Removes pickup from map (equivalent to Snake eating it), then updates time of last eaten pickup.
      *
      * @param i index of pickup to be eaten
      * @return pickup that was eaten
@@ -176,7 +176,7 @@ public class Pickups {
     }
 
     /**
-     * Returns if pickup can be placed on map
+     * Returns if pickup can be placed on map.
      *
      * Returns {@code true} if {@code interval} seconds have been passed since (last pickup placement time AND last
      * eaten time), {@code false} otherwise

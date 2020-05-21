@@ -10,25 +10,25 @@ import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Class representing a Snake
+ * Class representing a Snake.
  */
 @Slf4j
 public class Snake {
 
     /**
-     * Width of map
+     * Width of map.
      */
     @Getter
     private int sizeX = 37;
 
     /**
-     * Height of map
+     * Height of map.
      */
     @Getter
     private int sizeY = 37;
 
     /**
-     * Points earned by player
+     * Points earned by player.
      */
     @Getter
     private int points = 0;
@@ -47,7 +47,7 @@ public class Snake {
     public ArrayList<String> pickupsDisabled = new ArrayList<String>();
 
     /**
-     * Add points to player's points
+     * Add points to player's points.
      *
      * @param p points (int)
      */
@@ -59,17 +59,17 @@ public class Snake {
 //    private int[][] board = new int[sizeX][sizeY];
 
     /**
-     * Stores pickups
+     * Stores pickups.
      */
     public Pickups pickups = new Pickups();
 
     /**
-     * Stores pickup that was last eaten
+     * Stores pickup that was last eaten.
      */
     private Pickup lastEatenPickup = new Pickup(new Point(0,0),"empty");
 
     /**
-     * returns {@code lastEatenPickup}, and then places the special "empty" pickup into {@code lastEatenPickup}
+     * returns {@code lastEatenPickup}, and then places the special "empty" pickup into {@code lastEatenPickup}.
      *
      * @return {@code lastEatenPickup}
      */
@@ -80,20 +80,20 @@ public class Snake {
     }
 
     /**
-     * Instantiates a {@code SnakeBody}
+     * Instantiates a {@code SnakeBody}.
      */
     public SnakeBody body = new SnakeBody();
 
 //    private Boolean snakePlaced = false;
 
     /**
-     * Stores current direction the Snake is traveling
+     * Stores current direction the Snake is traveling.
      */
     @Getter
     private char direction = 'u';
 
     /**
-     * Sets direction of the Snake
+     * Sets direction of the Snake.
      *
      * If {@code dirNew} is the opposite of current {@code direction}, the direction is not changed. That would allow
      * the Snake to turn around into itself, which means Game Over.
@@ -130,7 +130,7 @@ public class Snake {
     }
 
     /**
-     * Constructor that places Snake onto given position
+     * Constructor that places Snake onto given position.
      *
      * @param posX X coordinate
      * @param posY Y coordinate
@@ -141,7 +141,7 @@ public class Snake {
     }
 
     /**
-     * Empty constructor
+     * Empty constructor.
      */
     public Snake(){
 //        initTable();
@@ -191,7 +191,7 @@ public class Snake {
     }
 
     /**
-     * Returns Vector of positions of empty cells of map (no Snake body parts, no pickups)
+     * Returns Vector of positions of empty cells of map (no Snake body parts, no pickups).
      *
      * @return vector of positions of empty cells of map
      */
@@ -212,7 +212,7 @@ public class Snake {
     }
 
     /**
-     * Places snake onto given X and Y coordinates of map
+     * Places snake onto given X and Y coordinates of map.
      *
      * @param posX X coordinate
      * @param posY Y coordinate
@@ -225,7 +225,7 @@ public class Snake {
     }
 
     /**
-     * Moves Snake by 1 tile
+     * Moves Snake by 1 tile.
      *
      * direction is determined by {@code direction} variable.
      *
@@ -308,7 +308,7 @@ public class Snake {
     }
 
     /**
-     * @return index of pickup that is at the same position as Snake's head, returns -1 if no collision
+     * @return index of pickup that is at the same position as Snake's head, returns -1 if no collision.
      */
     public int getPickupIndexCollidingWithHead(){
         int in = -1;

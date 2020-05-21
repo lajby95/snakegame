@@ -1,4 +1,4 @@
 /**
- * Contains Main class
+ * Contains Main class.
  */
 package main;

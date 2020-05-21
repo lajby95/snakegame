@@ -7,18 +7,18 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class representing one body part (or "tile") of the snake
+ * Class representing one body part (or "tile") of the snake.
  */
 public class SnakeBodyPart {
 
     /**
-     * Point representing the position of the body part
+     * Point representing the position of the body part.
      */
     @Getter
     private Point pos;
 
     /**
-     * Constructor that takes position as parameter
+     * Constructor that takes position as parameter.
      *
      * @param p Point(int x, int y)
      */
@@ -27,7 +27,7 @@ public class SnakeBodyPart {
     }
 
     /**
-     * Constructor that takes SnakeBodyPart as parameter
+     * Constructor that takes SnakeBodyPart as parameter.
      *
      * @param part SnakeBodyPart
      */
@@ -36,7 +36,7 @@ public class SnakeBodyPart {
     }
 
     /**
-     * Set point by Point object
+     * Set point by Point object.
      *
      * @param p Point
      */
@@ -45,7 +45,7 @@ public class SnakeBodyPart {
     }
 
     /**
-     * Set point by x and y coordinates
+     * Set point by x and y coordinates.
      *
      * @param x position
      * @param y position
@@ -55,7 +55,7 @@ public class SnakeBodyPart {
     }
 
     /**
-     * Set part from other SnakeBodyPart object
+     * Set part from other SnakeBodyPart object.
      *
      * @param part SnakeBodyPart
      */
@@ -64,7 +64,7 @@ public class SnakeBodyPart {
     }
 
     /**
-     * Compares position to other SnakeBodyPart
+     * Compares position to other SnakeBodyPart.
      *
      * @param other SnakeBodyPart
      * @return {@code true} if other part's X and Y coordinates match with X and Y of this, {@code false} otherwise.
@@ -77,7 +77,7 @@ public class SnakeBodyPart {
     }
 
     /**
-     * Compares position to pickup's position
+     * Compares position to pickup's position.
      *
      * @param other Pickup
      * @return {@code true} if pickup's X and Y coordinates match with X and Y of this bodypart, {@code false} otherwise.

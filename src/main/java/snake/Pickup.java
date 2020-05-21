@@ -10,13 +10,13 @@ import java.awt.*;
 public class Pickup {
 
     /**
-     * Position of pickup
+     * Position of pickup.
      */
     @Getter
     private Point pos;
 
     /**
-     * Type of pickup
+     * Type of pickup.
      *
      * e.g.: apple, slowdown, speedup, etc.
      */
@@ -24,25 +24,25 @@ public class Pickup {
     private String type;
 
     /**
-     * Stores if pickup has effect that lasts X seconds
+     * Stores if pickup has effect that lasts X seconds.
      */
     @Getter
     private Boolean effectTimer = false;
 
     /**
-     * If {@code effectTimer} is true, duration stores how many seconds the effect lasts
+     * If {@code effectTimer} is true, duration stores how many seconds the effect lasts.
      */
     @Getter
     private int effectDuration = 10;
 
     /**
-     * Stores the amount of points the player gets upon eating this pickup
+     * Stores the amount of points the player gets upon eating this pickup.
      */
     @Getter
     private int points;
 
     /**
-     * Constructor that takes position and type as parameters
+     * Constructor that takes position and type as parameters.
      *
      * @param p position
      * @param type of pickup
@@ -70,7 +70,7 @@ public class Pickup {
     }
 
     /**
-     * Constructor that takes other {@code Pickup} as parameter
+     * Constructor that takes other {@code Pickup} as parameter.
      *
      * @param other Pickup
      */

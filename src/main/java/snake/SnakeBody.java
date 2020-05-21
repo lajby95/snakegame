@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class representing Snake's body
+ * Class representing Snake's body.
  */
 @Slf4j
 public class SnakeBody {
@@ -19,7 +19,7 @@ public class SnakeBody {
     private Boolean snakePlaced = false;
 
     /**
-     * Vector of SnakeBodyParts
+     * Vector of SnakeBodyParts.
      */
     @Getter
     private Vector<SnakeBodyPart> body = new Vector<SnakeBodyPart>();
@@ -45,7 +45,7 @@ public class SnakeBody {
     }
 
     /**
-     * If Snake's length is more than 1, Snake's last body part is removed (only if snake is placed)
+     * If Snake's length is more than 1, Snake's last body part is removed (only if snake is placed).
      */
     public void shrink(){
         if(!snakePlaced) {
@@ -59,7 +59,7 @@ public class SnakeBody {
     }
 
     /**
-     * Places Snake body at X and Y position of map, with 1 bodypart
+     * Places Snake body at X and Y position of map, with 1 bodypart.
      *
      * @param x position
      * @param y position
@@ -76,7 +76,7 @@ public class SnakeBody {
     }
 
     /**
-     * Returns element of index i from Vector of body parts
+     * Returns element of index i from Vector of body parts.
      *
      * @param i index of body part
      * @return element of body
@@ -86,7 +86,7 @@ public class SnakeBody {
     }
 
     /**
-     * Returns last element of snake body
+     * Returns last element of snake body.
      *
      * @return SnakeBodyPart, last element of body
      */
@@ -95,7 +95,7 @@ public class SnakeBody {
     }
 
     /**
-     * Returns if head's position is the same as any other body part
+     * Returns if head's position is the same as any other body part.
      *
      * @return {@code true} if position of first body part is the same as any other body part, {@code false} otherwise
      */
@@ -113,7 +113,7 @@ public class SnakeBody {
     }
 
     /**
-     * Sets snake length
+     * Sets snake length.
      *
      * If Snake's length is lower than given parameter, Snake is extended until its length matches parameter.
      *
@@ -136,7 +136,7 @@ public class SnakeBody {
     }
 
     /**
-     * Returns length of body
+     * Returns length of body.
      *
      * @return length of body
      */
