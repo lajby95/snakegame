@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pickups.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">snake</a> &gt; <span class="el_source">Pickups.java</span></div><h1>Pickups.java</h1><pre class="source lang-java linenums">package snake;
+
+import lombok.Getter;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * Class representing pickups on the map
+ */
+public class Pickups {
+
+    /**
+     * Vector storing all pickups currently on map
+     */
+<span class="fc" id="L19">    private Vector&lt;Pickup&gt; pickups = new Vector&lt;Pickup&gt;();</span>
+
+    /**
+     * When was the last pickup placed
+     */
+<span class="nc" id="L24">    @Getter</span>
+    long lastPlacementTime;
+
+    /**
+     * When was the last pickup eaten.
+     */
+<span class="nc" id="L30">    @Getter</span>
+    long lastEatenTime;
+
+    /**
+     * How many pickups were eaten.
+     */
+<span class="pc" id="L36">    @Getter</span>
+    private int pickupsEaten = 0;
+
+    /**
+     * Stores upper limits that can be placed of all types of pickups.
+     */
+<span class="fc" id="L42">    HashMap&lt;String, Integer&gt; maxPickupCounts = new HashMap&lt;String, Integer&gt;();</span>
+
+    /**
+     * Stores how many pickups of all types are currently on the map.
+     */
+<span class="fc" id="L47">    HashMap&lt;String, Integer&gt; countOfPickups = new HashMap&lt;String, Integer&gt;();</span>
+
+    /**
+     * Stores if effectTimers are enabled for given type of pickups.
+     */
+<span class="pc" id="L52">    @Getter</span>
+    HashMap&lt;String, Boolean&gt; effectTimers = new HashMap&lt;String, Boolean&gt;();
+
+    /**
+     * Stores effectDurations for given type of pickups.
+     */
+<span class="pc" id="L58">    @Getter</span>
+    HashMap&lt;String, Integer&gt; effectDurations = new HashMap&lt;String, Integer&gt;();
+
+    /**
+     * Stores Points for given type of pickups.
+     */
+<span class="pc" id="L64">    @Getter</span>
+    HashMap&lt;String, Integer&gt; Points = new HashMap&lt;String, Integer&gt;();
+
+    /**
+     * Initialize properties of all types of pickups.
+     */
+<span class="fc" id="L70">    public Pickups(){</span>
+<span class="fc" id="L71">        maxPickupCounts.put(&quot;apple&quot;, 3);</span>
+<span class="fc" id="L72">        maxPickupCounts.put(&quot;speedup&quot;, 5);</span>
+<span class="fc" id="L73">        maxPickupCounts.put(&quot;slowdown&quot;, 3);</span>
+<span class="fc" id="L74">        maxPickupCounts.put(&quot;size1&quot;, 2);</span>
+
+<span class="fc" id="L76">        countOfPickups.put(&quot;apple&quot;, 0);</span>
+<span class="fc" id="L77">        countOfPickups.put(&quot;speedup&quot;, 0);</span>
+<span class="fc" id="L78">        countOfPickups.put(&quot;slowdown&quot;, 0);</span>
+<span class="fc" id="L79">        countOfPickups.put(&quot;size1&quot;, 0);</span>
+
+
+
+<span class="fc" id="L83">        effectTimers.put(&quot;apple&quot;, false);</span>
+<span class="fc" id="L84">        effectTimers.put(&quot;speedup&quot;, true);</span>
+<span class="fc" id="L85">        effectTimers.put(&quot;slowdown&quot;, true);</span>
+<span class="fc" id="L86">        effectTimers.put(&quot;size1&quot;, true);</span>
+
+<span class="fc" id="L88">        effectDurations.put(&quot;apple&quot;, 0);</span>
+<span class="fc" id="L89">        effectDurations.put(&quot;speedup&quot;, 10);</span>
+<span class="fc" id="L90">        effectDurations.put(&quot;slowdown&quot;, 10);</span>
+<span class="fc" id="L91">        effectDurations.put(&quot;size1&quot;, 15);</span>
+
+<span class="fc" id="L93">        Points.put(&quot;apple&quot;, 100);</span>
+<span class="fc" id="L94">        Points.put(&quot;speedup&quot;, 500);</span>
+<span class="fc" id="L95">        Points.put(&quot;slowdown&quot;, 50);</span>
+<span class="fc" id="L96">        Points.put(&quot;size1&quot;, 50);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Places a Pickup {@code p} on the map. The position is stored as the object's property.
+     *
+     * @param p Pickup
+     */
+    public void place(Pickup p){
+<span class="nc" id="L105">        pickups.add(p);</span>
+<span class="nc" id="L106">        lastPlacementTime = System.currentTimeMillis();</span>
+<span class="nc" id="L107">        countOfPickups.put(p.getType(), countOfPickups.get(p.getType())+1);</span>
+<span class="nc" id="L108">    }</span>
+
+    /**
+     * Returns the i-th pickup from the vector of {@code pickups}.
+     *
+     * @param i index of pickup in vector of {@code pickups}
+     * @return pickup
+     */
+    public Pickup get(int i){
+<span class="nc" id="L117">        return pickups.get(i);</span>
+    }
+
+    /**
+     * Returns vector of all pickups on the map.
+     *
+     * @return vector of all pickups on the map
+     */
+    public Vector&lt;Pickup&gt; getAll(){
+<span class="fc" id="L126">        return pickups;</span>
+    }
+
+    /**
+     * Returns all pickups placed on map of {@code type}.
+     *
+     * @param type of pickup
+     * @return Vector of pickups
+     */
+    public Vector&lt;Pickup&gt; getAll(String type){
+<span class="nc" id="L136">        Vector&lt;Pickup&gt; ps = new Vector&lt;Pickup&gt;();</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        for(Pickup p : pickups){</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if(p.getType().equals(type)) {</span>
+<span class="nc" id="L140">                ps.add(p);</span>
+            }
+<span class="nc" id="L142">        }</span>
+
+<span class="nc" id="L144">        return ps;</span>
+    }
+
+    /**
+     * Returns the amount of pickups of {@code type} placed on map.
+     *
+     * @param type of pickups
+     * @return count of pickups of {@code type}
+     */
+    public int getCountOfType(String type){
+<span class="nc" id="L154">        int count = 0;</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for(Pickup p : pickups){</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if(p.getType().equals(type)) {</span>
+<span class="nc" id="L157">                count++;</span>
+            }
+<span class="nc" id="L159">        }</span>
+
+<span class="nc" id="L161">        return count;</span>
+    }
+
+    /**
+     * Removes pickup from map (equivalent to Snake eating it), then updates time of last eaten pickup.
+     *
+     * @param i index of pickup to be eaten
+     * @return pickup that was eaten
+     */
+    public Pickup eat(int i){
+<span class="nc" id="L171">        lastEatenTime = System.currentTimeMillis();</span>
+<span class="nc" id="L172">        pickupsEaten++;</span>
+<span class="nc" id="L173">        Pickup p = this.get(i);</span>
+<span class="nc" id="L174">        countOfPickups.put(p.getType(), countOfPickups.get(p.getType())-1);</span>
+<span class="nc" id="L175">        return pickups.remove(i);</span>
+    }
+
+    /**
+     * Returns if pickup can be placed on map.
+     *
+     * Returns {@code true} if {@code interval} seconds have been passed since (last pickup placement time AND last
+     * eaten time), {@code false} otherwise
+     *
+     * @return Boolean
+     */
+    public Boolean canPlacePickup(){
+<span class="nc" id="L187">        double interval = 3;            // seconds</span>
+
+<span class="nc" id="L189">        long currentTimestamp = System.currentTimeMillis();</span>
+<span class="nc" id="L190">        if(</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                currentTimestamp &gt;= (this.getLastPlacementTime()+interval*1000)</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                &amp;&amp; currentTimestamp &gt;= (this.getLastEatenTime()+interval*1000)</span>
+        ) {
+<span class="nc" id="L194">            return true;</span>
+        } else {
+<span class="nc" id="L196">            return false;</span>
+        }
+    }
+
+    /**
+     * Creates a list of types of pickups that have not reached their specified maximum amount on the map, and then
+     * returns a random type from this list.
+     *
+     * @return String of pickup type
+     */
+    public String getNextRandomPlaceablePickup(){
+<span class="nc" id="L207">        ArrayList&lt;String&gt; pickups = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        for(String s : maxPickupCounts.keySet()) {</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">            if(countOfPickups.get(s) &lt; maxPickupCounts.get(s) ) {</span>
+<span class="nc" id="L210">                pickups.add(s);</span>
+            }
+<span class="nc" id="L212">        }</span>
+
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        if(pickups.size() == 0) {</span>
+<span class="nc" id="L215">            return &quot;&quot;;</span>
+        } else {
+<span class="nc" id="L217">            int randomIndex = ThreadLocalRandom.current().nextInt(0, pickups.size());</span>
+<span class="nc" id="L218">            return pickups.get(randomIndex);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

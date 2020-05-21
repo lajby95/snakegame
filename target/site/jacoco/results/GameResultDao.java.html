@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameResultDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">results</a> &gt; <span class="el_source">GameResultDao.java</span></div><h1>GameResultDao.java</h1><pre class="source lang-java linenums">package results;
+
+import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.statement.Update;
+
+import java.util.List;
+
+/**
+ * DAO class for Game Results, uses JDBI.
+ */
+public class GameResultDao {
+    Handle handle;
+
+    /**
+     * Constructor.
+     */
+<span class="nc" id="L18">    public GameResultDao(){</span>
+<span class="nc" id="L19">        Jdbi jdbi = Jdbi.create(&quot;jdbc:mysql://root:@localhost:3306/snakegame?serverTimezone=Europe/Amsterdam&quot;);</span>
+<span class="nc" id="L20">        handle = jdbi.open();</span>
+<span class="nc" id="L21">    }</span>
+
+    /**
+     * Inserts new row into results table.
+     *
+     * @param result GameResult object that contains data of result
+     */
+    public void insertGameResult(GameResult result){
+<span class="nc" id="L29">        Update insert = handle.createUpdate(&quot;INSERT INTO results VALUES (NULL, :playerName, :score, :snakeLength, :numOfPickups, :timeSurvived)&quot;);</span>
+<span class="nc" id="L30">        insert.bindBean(result);</span>
+<span class="nc" id="L31">        insert.execute();</span>
+<span class="nc" id="L32">    }</span>
+
+    /**
+     * Get game results from DB table.
+     *
+     * @param limit limit number of rows
+     * @return List of GameResult objects
+     */
+    public List&lt;GameResult&gt; getGameResults(int limit){
+<span class="nc" id="L41">        return handle.createQuery(&quot;SELECT id, playerName, score, snakeLength, numOfPickups, timeSurvived FROM results ORDER BY score DESC LIMIT :limit&quot;)</span>
+<span class="nc" id="L42">                .bind(&quot;limit&quot;, limit)</span>
+<span class="nc" id="L43">                .mapToBean(GameResult.class)</span>
+<span class="nc" id="L44">                .list();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

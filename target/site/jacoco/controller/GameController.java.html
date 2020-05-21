@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">controller</a> &gt; <span class="el_source">GameController.java</span></div><h1>GameController.java</h1><pre class="source lang-java linenums">package controller;
+
+import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
+import results.GameResult;
+import snake.*;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+<span class="nc" id="L27">@Slf4j</span>
+<span class="nc" id="L28">public class GameController implements Initializable {</span>
+
+    private AnimationTimer gameTimer;
+
+    public double originalUpdateInterval;
+<span class="nc" id="L33">    double updateInterval = originalUpdateInterval;</span>
+
+<span class="nc" id="L35">    char dir = 'u';</span>
+
+    private int snakeLength;        // A játék végén ide tároljuk el, hogy a halálkor milyen hosszú volt a kígyó
+
+    private long startTimestamp;
+    private long endTimestamp;
+
+<span class="nc" id="L42">    public Boolean paused = false;</span>
+
+    Stage stage;
+    Scene scene;
+
+<span class="nc" id="L47">    Snake snake = new Snake();</span>
+
+<span class="nc" id="L49">    int rectSize = 13;</span>
+
+<span class="nc" id="L51">    int sizeX = snake.getSizeX();</span>
+<span class="nc" id="L52">    int sizeY = snake.getSizeY();</span>
+
+    @FXML
+    private AnchorPane gameArea;
+
+<span class="nc" id="L57">    Rectangle rectangles[][] = new Rectangle[sizeX][sizeY];</span>
+
+    @FXML
+    Text pointsText;
+
+    @FXML
+    Text pausedText;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
+<span class="nc" id="L67">        startTimestamp = System.currentTimeMillis();</span>
+<span class="nc" id="L68">        snake.body.place(17,17);</span>
+<span class="nc" id="L69">        snake.body.setSnakeLength(10);</span>
+<span class="nc" id="L70">        initRectArray();</span>
+<span class="nc" id="L71">        initGameLoop();</span>
+<span class="nc" id="L72">    }</span>
+
+    public void pauseGame(){
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        paused = !paused;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if(paused) {</span>
+<span class="nc" id="L77">            gameTimer.stop();</span>
+<span class="nc" id="L78">            pausedText.setVisible(true);</span>
+        } else {
+<span class="nc" id="L80">            gameTimer.start();</span>
+<span class="nc" id="L81">            pausedText.setVisible(false);</span>
+        }
+<span class="nc" id="L83">    }</span>
+
+    public void initListeners(Stage stage, Scene scene, String difficulty){
+<span class="nc" id="L86">        this.stage = stage;</span>
+<span class="nc" id="L87">        this.scene = scene;</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if(difficulty.equals(&quot;easy&quot;)) {</span>
+<span class="nc" id="L89">            this.originalUpdateInterval = 300;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        } else if(difficulty.equals(&quot;medium&quot;)) {</span>
+<span class="nc" id="L91">            this.originalUpdateInterval = 200;</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        } else if(difficulty.equals(&quot;hard&quot;)) {</span>
+<span class="nc" id="L93">            this.originalUpdateInterval = 100;</span>
+        } else {
+<span class="nc" id="L95">            this.originalUpdateInterval = 200;</span>
+        }
+<span class="nc" id="L97">        this.updateInterval = originalUpdateInterval;</span>
+
+<span class="nc" id="L99">        this.scene.setOnKeyPressed(new EventHandler&lt;KeyEvent&gt;() {</span>
+            @Override
+            public void handle(KeyEvent event) {
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                if(snake.getDied()) {</span>
+<span class="nc" id="L103">                    return;</span>
+                }
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                if(event.getCode() == KeyCode.UP) {</span>
+<span class="nc" id="L106">                    dir = 'u';</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                } else if(event.getCode() == KeyCode.DOWN) {</span>
+<span class="nc" id="L108">                    dir = 'd';</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                } else if(event.getCode() == KeyCode.LEFT) {</span>
+<span class="nc" id="L110">                    dir = 'l';</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                } else if(event.getCode() == KeyCode.RIGHT) {</span>
+<span class="nc" id="L112">                    dir = 'r';</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                } else if(event.getCode() == KeyCode.ESCAPE) {</span>
+<span class="nc" id="L114">                    pauseGame();</span>
+                }
+<span class="nc" id="L116">            }</span>
+        });
+<span class="nc" id="L118">        log.info(&quot;Keyboard listener initialized&quot;);</span>
+
+<span class="nc" id="L120">        stage.setWidth(510);</span>
+<span class="nc" id="L121">        stage.setHeight(580);</span>
+<span class="nc" id="L122">    }</span>
+
+    public void initRectArray(){
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        for (int i = 0; i &lt; snake.getSizeX(); i++) {</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            for (int j = 0; j &lt; snake.getSizeY(); j++) {</span>
+<span class="nc" id="L127">                Rectangle r = new Rectangle();</span>
+<span class="nc" id="L128">                r.setX(i*rectSize);</span>
+<span class="nc" id="L129">                r.setY(j*rectSize);</span>
+<span class="nc" id="L130">                r.setWidth(rectSize);</span>
+<span class="nc" id="L131">                r.setHeight(rectSize);</span>
+<span class="nc" id="L132">                r.setFill(Color.WHITE);</span>
+<span class="nc" id="L133">                r.setStroke(Color.DIMGREY);</span>
+<span class="nc" id="L134">                r.setStrokeWidth(1);</span>
+
+<span class="nc" id="L136">                gameArea.getChildren().add(r);</span>
+            }
+        }
+<span class="nc" id="L139">        log.info(&quot;Rectangle array initialized&quot;);</span>
+<span class="nc" id="L140">    }</span>
+
+    public Rectangle getRect(int posX, int posY){
+<span class="nc" id="L143">        return (Rectangle)gameArea.getChildren().get(posX*sizeX+posY);</span>
+    }
+
+
+    public void drawAllPickups(){
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        for(Pickup p : snake.pickups.getAll()) {</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            if(snake.pickupsDisabled.contains(p.getType())) {</span>
+<span class="nc" id="L150">                continue;</span>
+            }
+<span class="nc" id="L152">            Rectangle r = getRect(p.getPos().x, p.getPos().y);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if(p.getType().equals(&quot;apple&quot;)) {</span>
+<span class="nc" id="L154">                r.setFill(Color.RED);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            } else if(p.getType().equals(&quot;speedup&quot;)) {</span>
+<span class="nc" id="L156">                r.setFill(Color.CYAN);</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            } else if(p.getType().equals(&quot;slowdown&quot;)) {</span>
+<span class="nc" id="L158">                r.setFill(Color.BLUE);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">            } else if(p.getType().equals(&quot;size1&quot;)) {</span>
+<span class="nc" id="L160">                r.setFill(Color.YELLOWGREEN);</span>
+            }
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">    }</span>
+    public void drawAllPickupsOfType(String type){
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        for(Pickup p : snake.pickups.getAll(type)) {</span>
+<span class="nc" id="L166">            Rectangle r = getRect(p.getPos().x, p.getPos().y);</span>
+<span class="nc" id="L167">            r.setFill(Color.RED);</span>
+<span class="nc" id="L168">        }</span>
+<span class="nc" id="L169">    }</span>
+
+    public void drawBoard(){
+//        int[][] board = snake.getBoard();
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        for (int i = 0; i &lt; sizeX; i++) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            for (int j = 0; j &lt; sizeY; j++) {</span>
+<span class="nc" id="L176">                Rectangle r = getRect(i,j);</span>
+<span class="nc" id="L177">                r.setFill(Color.WHITE);</span>
+            }
+        }
+
+<span class="nc" id="L181">        drawAllPickups();</span>
+
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        for (int i = 0; i &lt; snake.body.size(); i++) {</span>
+<span class="nc" id="L184">            SnakeBodyPart part = snake.body.get(i);</span>
+<span class="nc" id="L185">            Rectangle r = getRect(part.getPos().x, part.getPos().y);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">            if(i%3==0) {</span>
+<span class="nc" id="L187">                r.setFill(Color.BLACK);</span>
+<span class="nc bnc" id="L188" title="All 4 branches missed.">            } else if(i%3==1 || i%3==2) {</span>
+<span class="nc" id="L189">                r.setFill(Color.DARKGREEN);</span>
+            }
+        }
+
+<span class="nc" id="L193">    }</span>
+
+    public void pickupEffect(Pickup p){
+<span class="nc bnc" id="L196" title="All 2 branches missed.">        if(p.getType().equals(&quot;apple&quot;)) {</span>
+<span class="nc" id="L197">            snake.body.extend();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        } else if(p.getType().equals(&quot;speedup&quot;)) {</span>
+<span class="nc" id="L199">            snake.pickupsDisabled.add(&quot;slowdown&quot;);</span>
+<span class="nc" id="L200">            snake.pickupsDisabled.add(&quot;speedup&quot;);</span>
+<span class="nc" id="L201">            updateInterval = originalUpdateInterval * 0.5f;</span>
+
+<span class="nc" id="L203">            PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));</span>
+<span class="nc" id="L204">            delay.setOnFinished(event -&gt; {</span>
+<span class="nc" id="L205">                updateInterval = originalUpdateInterval;</span>
+<span class="nc" id="L206">                snake.pickupsDisabled.remove(&quot;slowdown&quot;);</span>
+<span class="nc" id="L207">                snake.pickupsDisabled.remove(&quot;speedup&quot;);</span>
+<span class="nc" id="L208">            });</span>
+<span class="nc" id="L209">            delay.play();</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        } else if(p.getType().equals(&quot;slowdown&quot;)) {</span>
+<span class="nc" id="L211">            snake.pickupsDisabled.add(&quot;slowdown&quot;);</span>
+<span class="nc" id="L212">            snake.pickupsDisabled.add(&quot;speedup&quot;);</span>
+<span class="nc" id="L213">            updateInterval = originalUpdateInterval * 1.5f;</span>
+
+<span class="nc" id="L215">            PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));</span>
+<span class="nc" id="L216">            delay.setOnFinished(event -&gt; {</span>
+<span class="nc" id="L217">                updateInterval = originalUpdateInterval;</span>
+<span class="nc" id="L218">                snake.pickupsDisabled.remove(&quot;slowdown&quot;);</span>
+<span class="nc" id="L219">                snake.pickupsDisabled.remove(&quot;speedup&quot;);</span>
+<span class="nc" id="L220">            });</span>
+<span class="nc" id="L221">            delay.play();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        } else if(p.getType().equals(&quot;size1&quot;)) {</span>
+<span class="nc" id="L223">            snake.pickupsDisabled.add(&quot;apple&quot;);</span>
+<span class="nc" id="L224">            snake.pickupsDisabled.add(&quot;size1&quot;);</span>
+<span class="nc" id="L225">            int originalSize = snake.body.size();</span>
+<span class="nc" id="L226">            snake.body.setSnakeLength(1);</span>
+
+<span class="nc" id="L228">            PauseTransition delay = new PauseTransition(Duration.seconds(p.getEffectDuration()));</span>
+<span class="nc" id="L229">            delay.setOnFinished(event -&gt; {</span>
+<span class="nc" id="L230">                snake.body.setSnakeLength(originalSize);</span>
+<span class="nc" id="L231">                snake.pickupsDisabled.remove(&quot;apple&quot;);</span>
+<span class="nc" id="L232">                snake.pickupsDisabled.remove(&quot;size1&quot;);</span>
+<span class="nc" id="L233">            });</span>
+<span class="nc" id="L234">            delay.play();</span>
+        }
+<span class="nc" id="L236">    }</span>
+
+    public void moveSnake(){
+<span class="nc" id="L239">        snake.move();</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">        if(snake.getDied()) {</span>
+            try {
+<span class="nc" id="L242">                die();</span>
+<span class="nc" id="L243">            } catch (IOException e) {</span>
+<span class="nc" id="L244">                e.printStackTrace();</span>
+<span class="nc" id="L245">            }</span>
+        }
+<span class="nc" id="L247">        Pickup lastEaten = snake.popLastEaten();</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        if(!lastEaten.getType().equals(&quot;empty&quot;)) {</span>
+<span class="nc" id="L249">            pickupEffect(lastEaten);</span>
+        }
+<span class="nc" id="L251">    }</span>
+
+    public void switchToGameOverWindow(){
+<span class="nc" id="L254">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/gameover.fxml&quot;));</span>
+        try {
+<span class="nc" id="L256">            Parent root = (Parent)loader.load();</span>
+<span class="nc" id="L257">            GameOverController controller = (GameOverController)loader.getController();</span>
+<span class="nc" id="L258">            Scene scene = new Scene(root);</span>
+
+<span class="nc" id="L260">            int timeSurvivedSeconds = Math.round((float)(endTimestamp-startTimestamp)/1000);</span>
+<span class="nc" id="L261">            log.info(&quot;Time survived in seconds: {}&quot;, timeSurvivedSeconds);</span>
+
+<span class="nc" id="L263">            GameResult result = new GameResult();</span>
+<span class="nc" id="L264">            result.setNumOfPickups(snake.pickups.getPickupsEaten());</span>
+<span class="nc" id="L265">            result.setScore(snake.getPoints());</span>
+<span class="nc" id="L266">            result.setSnakeLength(snakeLength);</span>
+<span class="nc" id="L267">            result.setTimeSurvived(timeSurvivedSeconds);</span>
+
+<span class="nc" id="L269">            controller.init(result);      // eredmény átadása a GameOver controllernek</span>
+
+<span class="nc" id="L271">            stage.setTitle(&quot;Game Over!&quot;);</span>
+<span class="nc" id="L272">            stage.setResizable(false);</span>
+
+<span class="nc" id="L274">            stage.setScene(scene);</span>
+<span class="nc" id="L275">            stage.show();</span>
+<span class="nc" id="L276">        } catch (IOException e) {</span>
+<span class="nc" id="L277">            e.printStackTrace();</span>
+<span class="nc" id="L278">        }</span>
+<span class="nc" id="L279">    }</span>
+
+    public void die() throws IOException {
+<span class="nc" id="L282">        endTimestamp = System.currentTimeMillis();</span>
+<span class="nc" id="L283">        snakeLength = snake.body.size();</span>
+<span class="nc" id="L284">        gameTimer.stop();</span>
+
+<span class="nc" id="L286">        float dieAnimationInterval = 2000/(float)snake.body.size();</span>
+
+<span class="nc" id="L288">        AnimationTimer dieTimer = new AnimationTimer(){</span>
+<span class="nc" id="L289">            private long lastUpdate = 0;</span>
+            @Override
+            public void handle(long now){
+<span class="nc bnc" id="L292" title="All 2 branches missed.">                if(now - lastUpdate &gt;= dieAnimationInterval*1000*1000) {</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">                    if(snake.body.size() &gt; 1) {</span>
+<span class="nc" id="L294">                        snake.body.shrink();</span>
+<span class="nc" id="L295">                        drawBoard();</span>
+                    } else {
+<span class="nc" id="L297">                        this.stop();</span>
+<span class="nc" id="L298">                        switchToGameOverWindow();</span>
+                    }
+<span class="nc" id="L300">                    lastUpdate = now;</span>
+                }
+<span class="nc" id="L302">            }</span>
+        };
+<span class="nc" id="L304">        dieTimer.start();</span>
+<span class="nc" id="L305">    }</span>
+
+    private void initGameLoop(){
+<span class="nc" id="L308">        gameTimer = new AnimationTimer(){</span>
+<span class="nc" id="L309">            private long lastUpdate = 0;</span>
+            @Override
+            public void handle(long now){
+<span class="nc bnc" id="L312" title="All 2 branches missed.">                if(now - lastUpdate &gt;= updateInterval*1000*1000) {</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">                    if(dir != snake.getDirection()) {</span>
+<span class="nc" id="L314">                        snake.setDirection(dir);</span>
+                    }
+<span class="nc" id="L316">                    moveSnake();</span>
+<span class="nc" id="L317">                    drawBoard();</span>
+
+<span class="nc" id="L319">                    lastUpdate = now;</span>
+
+<span class="nc" id="L321">                    pointsText.setText(Integer.toString(snake.getPoints()));</span>
+                }
+<span class="nc bnc" id="L323" title="All 2 branches missed.">                if(snake.pickups.canPlacePickup()) {</span>
+<span class="nc" id="L324">                    snake.placeRandomPickup();</span>
+                }
+<span class="nc" id="L326">            }</span>
+        };
+<span class="nc" id="L328">        gameTimer.start();</span>
+<span class="nc" id="L329">        log.info(&quot;Game loop initialized&quot;);</span>
+<span class="nc" id="L330">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

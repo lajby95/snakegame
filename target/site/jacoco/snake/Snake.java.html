@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Snake.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">snake</a> &gt; <span class="el_source">Snake.java</span></div><h1>Snake.java</h1><pre class="source lang-java linenums">package snake;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * Class representing a Snake.
+ */
+<span class="fc" id="L15">@Slf4j</span>
+public class Snake {
+
+    /**
+     * Width of map.
+     */
+<span class="pc" id="L21">    @Getter</span>
+    private int sizeX = 37;
+
+    /**
+     * Height of map.
+     */
+<span class="pc" id="L27">    @Getter</span>
+    private int sizeY = 37;
+
+    /**
+     * Points earned by player.
+     */
+<span class="pc" id="L33">    @Getter</span>
+    private int points = 0;
+
+    /**
+     * Is Snake dead?
+     */
+<span class="pc" id="L39">    @Getter</span>
+<span class="pc" id="L40">    private Boolean died = false;</span>
+
+    /**
+     * List of pickups types that are disabled. For example, when eating a slowdown pickup, we don't want the player
+     * to be able to eat another slowdown pickup while the effect is active, and we also don't want the player to
+     * eat a speedup pickup, since that would mean 2 pickups affecting speed are in effect at the same time.
+     */
+<span class="pc" id="L47">    public ArrayList&lt;String&gt; pickupsDisabled = new ArrayList&lt;String&gt;();</span>
+
+    /**
+     * Add points to player's points.
+     *
+     * @param p points (int)
+     */
+    public void addPoints(int p){
+<span class="nc" id="L55">        points += p;</span>
+<span class="nc" id="L56">    }</span>
+
+//    @Getter
+//    private int[][] board = new int[sizeX][sizeY];
+
+    /**
+     * Stores pickups.
+     */
+<span class="pc" id="L64">    public Pickups pickups = new Pickups();</span>
+
+    /**
+     * Stores pickup that was last eaten.
+     */
+<span class="pc" id="L69">    private Pickup lastEatenPickup = new Pickup(new Point(0,0),&quot;empty&quot;);</span>
+
+    /**
+     * returns {@code lastEatenPickup}, and then places the special &quot;empty&quot; pickup into {@code lastEatenPickup}.
+     *
+     * @return {@code lastEatenPickup}
+     */
+    public Pickup popLastEaten(){
+<span class="nc" id="L77">        Pickup p = new Pickup(lastEatenPickup);</span>
+<span class="nc" id="L78">        lastEatenPickup = new Pickup(new Point(0,0), &quot;empty&quot;);</span>
+<span class="nc" id="L79">        return p;</span>
+    }
+
+    /**
+     * Instantiates a {@code SnakeBody}.
+     */
+<span class="pc" id="L85">    public SnakeBody body = new SnakeBody();</span>
+
+//    private Boolean snakePlaced = false;
+
+    /**
+     * Stores current direction the Snake is traveling.
+     */
+<span class="pc" id="L92">    @Getter</span>
+    private char direction = 'u';
+
+    /**
+     * Sets direction of the Snake.
+     *
+     * If {@code dirNew} is the opposite of current {@code direction}, the direction is not changed. That would allow
+     * the Snake to turn around into itself, which means Game Over.
+     *
+     * @param dirNew new direction
+     */
+    public void setDirection(char dirNew){
+<span class="pc bpc" id="L104" title="1 of 8 branches missed.">        if(!(dirNew == 'u' || dirNew == 'd' || dirNew == 'l' || dirNew == 'r')) {</span>
+<span class="nc" id="L105">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L107">        char dir = getDirection();</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if(dirNew == dir) {</span>
+<span class="nc" id="L109">            return;</span>
+        }
+<span class="pc bpc" id="L111" title="1 of 16 branches missed.">        if(</span>
+                dirNew == 'd' &amp;&amp; dir == 'u'
+                || dirNew == 'u' &amp;&amp; dir == 'd'
+                || dirNew == 'l' &amp;&amp; dir == 'r'
+                || dirNew == 'r' &amp;&amp; dir == 'l'
+        ) {
+<span class="fc" id="L117">            log.info(&quot;Can't change direction to opposite!&quot;);</span>
+<span class="fc" id="L118">            return;</span>
+        }
+
+<span class="fc" id="L121">        this.direction = dirNew;</span>
+<span class="fc" id="L122">        String d = &quot;&quot;;</span>
+<span class="pc bpc" id="L123" title="2 of 5 branches missed.">        switch(dirNew){</span>
+<span class="nc" id="L124">            case 'u': d = &quot;UP&quot;; break;</span>
+<span class="fc" id="L125">            case 'd': d = &quot;DOWN&quot;; break;</span>
+<span class="fc" id="L126">            case 'l': d = &quot;LEFT&quot;; break;</span>
+<span class="fc" id="L127">            case 'r': d = &quot;RIGHT&quot;; break;</span>
+        }
+<span class="fc" id="L129">        log.info(&quot;direction changed to {}&quot;, d);</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Constructor that places Snake onto given position.
+     *
+     * @param posX X coordinate
+     * @param posY Y coordinate
+     */
+<span class="nc" id="L138">    public Snake(int posX, int posY){</span>
+//        initTable();
+<span class="nc" id="L140">        place(posX, posY);</span>
+<span class="nc" id="L141">    }</span>
+
+    /**
+     * Empty constructor.
+     */
+<span class="fc" id="L146">    public Snake(){</span>
+//        initTable();
+<span class="fc" id="L148">    }</span>
+
+//    public void initTable(){
+//        for (int i = 0; i &lt; board.length; i++) {
+//            for (int j = 0; j &lt; board[0].length; j++) {
+//                board[i][j] = 0;
+//            }
+//        }
+//    }
+
+    /**
+     * Returns 2 dimensional int array of map. Values consist of:
+     *
+     * Empty cells = 0
+     *
+     * Pickups = 1
+     *
+     * Snake = 2
+     *
+     * @return int[][] array of map
+     */
+    public int[][] getBoard(){
+<span class="nc" id="L170">        int[][] board = new int[sizeX][sizeY];</span>
+
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        for (int i = 0; i &lt; sizeX; i++) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            for (int j = 0; j &lt; sizeY; j++) {</span>
+<span class="nc" id="L174">                board[i][j] = 0;</span>
+            }
+        }
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        for (Pickup p : pickups.getAll()) {</span>
+<span class="nc" id="L179">            int pX = p.getPos().x;</span>
+<span class="nc" id="L180">            int pY = p.getPos().y;</span>
+<span class="nc" id="L181">            board[pX][pY] = 1;</span>
+<span class="nc" id="L182">        }</span>
+
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        for(SnakeBodyPart p : body.getBody()){</span>
+<span class="nc" id="L185">            int pX = p.getPos().x;</span>
+<span class="nc" id="L186">            int pY = p.getPos().y;</span>
+<span class="nc" id="L187">            board[pX][pY] = 2;</span>
+<span class="nc" id="L188">        }</span>
+
+<span class="nc" id="L190">        return board;</span>
+    }
+
+    /**
+     * Returns Vector of positions of empty cells of map (no Snake body parts, no pickups).
+     *
+     * @return vector of positions of empty cells of map
+     */
+    public Vector&lt;Point&gt; getEmptyCellsOfBoard(){
+<span class="nc" id="L199">        Vector&lt;Point&gt; cells = new Vector&lt;Point&gt;();</span>
+
+<span class="nc" id="L201">        int[][] board = getBoard();</span>
+
+<span class="nc bnc" id="L203" title="All 2 branches missed.">        for (int i = 0; i &lt; board.length; i++) {</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            for (int j = 0; j &lt; board[0].length; j++) {</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                if(board[i][j] == 0) {</span>
+<span class="nc" id="L206">                    cells.add(new Point(i,j));</span>
+                }
+            }
+        }
+
+<span class="nc" id="L211">        return cells;</span>
+    }
+
+    /**
+     * Places snake onto given X and Y coordinates of map.
+     *
+     * @param posX X coordinate
+     * @param posY Y coordinate
+     */
+    public void place(int posX, int posY){
+<span class="pc bpc" id="L221" title="3 of 8 branches missed.">        if(posX &gt;= sizeX || posY &gt;= sizeY || posX &lt; 0 || posY &lt; 0) {</span>
+<span class="fc" id="L222">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L224">        body.place(posX, posY);</span>
+<span class="fc" id="L225">    }</span>
+
+    /**
+     * Moves Snake by 1 tile.
+     *
+     * direction is determined by {@code direction} variable.
+     *
+     * If after move, Snake head collides with any other body part, Snake dies.
+     *
+     * After every move, it is checked if head is at position of any pickup. If true, then pickup is eaten, and
+     * points are added to player.
+     *
+     */
+    public void move(){
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if(body.size() &gt; 1) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            for (int i = body.size()-1; i &gt;= 1; i--) {</span>
+<span class="fc" id="L241">                body.get(i).set(body.get(i-1));</span>
+            }
+        }
+
+<span class="fc" id="L245">        SnakeBodyPart head = body.get(0);</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if(direction == 'u') {</span>
+<span class="fc" id="L247">            head.set(head.getPos().x, head.getPos().y-1);</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        } else if(direction == 'd') {</span>
+<span class="fc" id="L249">            head.set(head.getPos().x, head.getPos().y+1);</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        } else if(direction == 'l') {</span>
+<span class="fc" id="L251">            head.set(head.getPos().x-1, head.getPos().y);</span>
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        } else if(direction == 'r') {</span>
+<span class="fc" id="L253">            head.set(head.getPos().x+1, head.getPos().y);</span>
+        }
+
+        // snake can go through edge of map to other side
+<span class="fc" id="L257">        head.set(head.getPos().x % sizeX, head.getPos().y % sizeY);</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">        if(head.getPos().x &lt; 0) {</span>
+<span class="fc" id="L259">            head.set(sizeX-head.getPos().x-2, head.getPos().y);</span>
+        }
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        if(head.getPos().y &lt; 0) {</span>
+<span class="nc" id="L262">            head.set(head.getPos().x, sizeY-head.getPos().y-2);</span>
+        }
+<span class="fc" id="L264">        log.info(&quot;Snake head position: ({},{})&quot;, head.getPos().x, head.getPos().y);</span>
+
+//        log.info(&quot;------------- body parts ----------------------&quot;);
+//        for (int i = 0; i &lt; body.size(); i++) {
+//            log.info(i+&quot;. bodypart: ({},{})&quot;, body.get(i).getPos().x, body.get(i).getPos().y);
+//        }
+
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        if(body.isHeadCollidingWithBody()) {</span>
+<span class="fc" id="L272">            log.info(&quot;Snake Collision with itself! Snake died!&quot;);</span>
+<span class="fc" id="L273">            died = true;</span>
+        }
+
+<span class="fc" id="L276">        int pickupIndexCollidingWithHead = getPickupIndexCollidingWithHead();</span>
+<span class="pc bpc" id="L277" title="3 of 4 branches missed.">        if(pickupIndexCollidingWithHead != -1 &amp;&amp; !pickupsDisabled.contains(pickups.get(pickupIndexCollidingWithHead).getType())) {</span>
+<span class="nc" id="L278">            lastEatenPickup = pickups.eat(pickupIndexCollidingWithHead);</span>
+<span class="nc" id="L279">            addPoints(lastEatenPickup.getPoints());</span>
+<span class="nc" id="L280">            log.info(&quot;Snake has eaten a(n) {}&quot;, lastEatenPickup.getType());</span>
+        }
+<span class="fc" id="L282">    }</span>
+
+    /**
+     * Places random pickup to random empty cell.
+     */
+    public void placeRandomPickup(){
+<span class="nc" id="L288">        Vector&lt;Point&gt; emptyCells = getEmptyCellsOfBoard();</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">        if(emptyCells.size() &gt; 0) {</span>
+<span class="nc" id="L290">            int randomIndex = ThreadLocalRandom.current().nextInt(0, emptyCells.size());</span>
+<span class="nc" id="L291">            String nextRandomPickup = pickups.getNextRandomPlaceablePickup();</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">            if(!nextRandomPickup.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L293">                pickups.place(</span>
+                        new Pickup(
+<span class="nc" id="L295">                                emptyCells.get(randomIndex),</span>
+                                nextRandomPickup,
+<span class="nc" id="L297">                                pickups.getEffectTimers().get(nextRandomPickup),</span>
+<span class="nc" id="L298">                                pickups.getEffectDurations().get(nextRandomPickup),</span>
+<span class="nc" id="L299">                                pickups.getPoints().get(nextRandomPickup)</span>
+                        )
+                );
+            }
+        }
+
+//        for (int i = 0; i &lt; pickups.getAll().size(); i++) {
+//            log.info(&quot;Pickup at ({},{})&quot;, pickups.get(i).getPos().x, pickups.get(i).getPos().y);
+//        }
+<span class="nc" id="L308">    }</span>
+
+    /**
+     * @return index of pickup that is at the same position as Snake's head, returns -1 if no collision.
+     */
+    public int getPickupIndexCollidingWithHead(){
+<span class="fc" id="L314">        int in = -1;</span>
+
+<span class="fc" id="L316">        Pickups ps = pickups;</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        for (int i=0; i&lt;ps.getAll().size(); i++) {</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">            if(</span>
+//                    body.get(0).getPos().x == ps.get(i).getPos().x &amp;&amp; body.get(0).getPos().y == ps.get(i).getPos().y
+<span class="nc" id="L320">                    body.get(0).equals(ps.get(i))</span>
+            ) {
+<span class="nc" id="L322">                in = i;</span>
+            }
+        }
+
+<span class="fc" id="L326">        return in;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

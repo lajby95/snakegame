@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SnakeBodyPart.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">snake</a> &gt; <span class="el_source">SnakeBodyPart.java</span></div><h1>SnakeBodyPart.java</h1><pre class="source lang-java linenums">package snake;
+
+import javafx.geometry.Point2D;
+import lombok.Getter;
+
+import java.awt.*;
+import java.util.Vector;
+
+/**
+ * Class representing one body part (or &quot;tile&quot;) of the snake.
+ */
+public class SnakeBodyPart {
+
+    /**
+     * Point representing the position of the body part.
+     */
+<span class="fc" id="L17">    @Getter</span>
+    private Point pos;
+
+    /**
+     * Constructor that takes position as parameter.
+     *
+     * @param p Point(int x, int y)
+     */
+<span class="fc" id="L25">    public SnakeBodyPart(Point p) {</span>
+<span class="fc" id="L26">        this.pos = p;</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Constructor that takes SnakeBodyPart as parameter.
+     *
+     * @param part SnakeBodyPart
+     */
+<span class="fc" id="L34">    public SnakeBodyPart(SnakeBodyPart part) {</span>
+<span class="fc" id="L35">        set(part);</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Set point by Point object.
+     *
+     * @param p Point
+     */
+    public void set(Point p) {
+<span class="nc" id="L44">        this.pos = p;</span>
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * Set point by x and y coordinates.
+     *
+     * @param x position
+     * @param y position
+     */
+    public void set(int x, int y) {
+<span class="fc" id="L54">        this.pos = new Point(x,y);</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Set part from other SnakeBodyPart object.
+     *
+     * @param part SnakeBodyPart
+     */
+    public void set(SnakeBodyPart part) {
+<span class="fc" id="L63">        this.pos = part.getPos();</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Compares position to other SnakeBodyPart.
+     *
+     * @param other SnakeBodyPart
+     * @return {@code true} if other part's X and Y coordinates match with X and Y of this, {@code false} otherwise.
+     */
+    public Boolean equals(SnakeBodyPart other){
+<span class="fc bfc" id="L73" title="All 4 branches covered.">        if(other.getPos().getX() == this.getPos().getX() &amp;&amp; other.getPos().getY() == this.getPos().getY()) {</span>
+<span class="fc" id="L74">            return true;</span>
+        }
+<span class="fc" id="L76">        return false;</span>
+    }
+
+    /**
+     * Compares position to pickup's position.
+     *
+     * @param other Pickup
+     * @return {@code true} if pickup's X and Y coordinates match with X and Y of this bodypart, {@code false} otherwise.
+     */
+    public Boolean equals(Pickup other){
+<span class="nc bnc" id="L86" title="All 4 branches missed.">        return this.getPos().x == other.getPos().x &amp;&amp; this.getPos().y == other.getPos().y;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

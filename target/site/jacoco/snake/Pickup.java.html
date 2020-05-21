@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pickup.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">snake</a> &gt; <span class="el_source">Pickup.java</span></div><h1>Pickup.java</h1><pre class="source lang-java linenums">package snake;
+
+import lombok.Getter;
+
+import java.awt.*;
+
+/**
+ * Class representing a pickup for Snake
+ */
+public class Pickup {
+
+    /**
+     * Position of pickup.
+     */
+<span class="nc" id="L15">    @Getter</span>
+    private Point pos;
+
+    /**
+     * Type of pickup.
+     *
+     * e.g.: apple, slowdown, speedup, etc.
+     */
+<span class="nc" id="L23">    @Getter</span>
+    private String type;
+
+    /**
+     * Stores if pickup has effect that lasts X seconds.
+     */
+<span class="pc" id="L29">    @Getter</span>
+<span class="pc" id="L30">    private Boolean effectTimer = false;</span>
+
+    /**
+     * If {@code effectTimer} is true, duration stores how many seconds the effect lasts.
+     */
+<span class="pc" id="L35">    @Getter</span>
+    private int effectDuration = 10;
+
+    /**
+     * Stores the amount of points the player gets upon eating this pickup.
+     */
+<span class="nc" id="L41">    @Getter</span>
+    private int points;
+
+    /**
+     * Constructor that takes position and type as parameters.
+     *
+     * @param p position
+     * @param type of pickup
+     */
+<span class="fc" id="L50">    public Pickup(Point p, String type){</span>
+<span class="fc" id="L51">        this.pos = p;</span>
+<span class="fc" id="L52">        this.type = type;</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * Constructor that takes following as parameters:
+     *
+     * @param p position
+     * @param type of pickup
+     * @param effectTimer Boolean
+     * @param effectDuration duration of pickup's effect
+     * @param points points for pickup
+     */
+<span class="nc" id="L64">    public Pickup(Point p, String type, Boolean effectTimer, int effectDuration, int points){</span>
+<span class="nc" id="L65">        this.pos = p;</span>
+<span class="nc" id="L66">        this.type = type;</span>
+<span class="nc" id="L67">        this.effectTimer = effectTimer;</span>
+<span class="nc" id="L68">        this.effectDuration = effectDuration;</span>
+<span class="nc" id="L69">        this.points = points;</span>
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Constructor that takes other {@code Pickup} as parameter.
+     *
+     * @param other Pickup
+     */
+<span class="nc" id="L77">    public Pickup(Pickup other){</span>
+<span class="nc" id="L78">        this.pos = other.getPos();</span>
+<span class="nc" id="L79">        this.type = other.getType();</span>
+
+<span class="nc" id="L81">        this.effectTimer = other.getEffectTimer();</span>
+<span class="nc" id="L82">        this.effectDuration = other.getEffectDuration();</span>
+<span class="nc" id="L83">        this.points = other.getPoints();</span>
+<span class="nc" id="L84">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

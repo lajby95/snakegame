@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+snakegame,controller,GameController.new AnimationTimer() {...},50,0,4,0,10,0,4,0,2,0
+snakegame,controller,GameController.new EventHandler() {...},57,0,12,0,14,0,8,0,2,0
+snakegame,controller,GameController,722,0,52,0,162,0,44,0,18,0
+snakegame,controller,GameController.new AnimationTimer() {...},68,0,6,0,12,0,5,0,2,0
+snakegame,controller,GameOverController,67,0,0,0,15,0,3,0,3,0
+snakegame,controller,MainMenuController,101,0,12,0,25,0,10,0,4,0
+snakegame,snake,Pickups,215,179,18,0,40,30,22,2,13,2
+snakegame,snake,SnakeBodyPart,23,50,4,4,3,14,4,8,2,6
+snakegame,snake,Snake,319,316,34,49,51,58,31,29,8,9
+snakegame,snake,Pickup,70,16,0,0,17,7,7,1,7,1
+snakegame,snake,SnakeBody,61,118,14,8,20,27,11,11,3,8
+snakegame,main,MyApplication,19,0,0,0,5,0,2,0,2,0
+snakegame,main,Main,7,0,0,0,3,0,2,0,2,0
+snakegame,results,GameResult,98,0,0,0,17,0,16,0,16,0
+snakegame,results,GameResultDao,35,0,0,0,12,0,3,0,3,0
