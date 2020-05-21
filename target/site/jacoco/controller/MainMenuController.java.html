@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainMenuController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">snakegame</a> &gt; <a href="index.source.html" class="el_package">controller</a> &gt; <span class="el_source">MainMenuController.java</span></div><h1>MainMenuController.java</h1><pre class="source lang-java linenums">package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,54 +9,97 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import results.GameResult;
+import results.GameResultDao;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.List;
 
-<span class="nc" id="L14">public class MainMenuController {</span>
+<span class="nc" id="L23">public class MainMenuController {</span>
 
-<span class="nc" id="L16">    String difficulty = &quot;medium&quot;;</span>
+<span class="nc" id="L25">    String difficulty = &quot;medium&quot;;</span>
+
+<span class="nc" id="L27">    GameResultDao resultDao = new GameResultDao();</span>
 
     @FXML
     Button difficultyButton;
 
+    @FXML
+    TableView&lt;GameResult&gt; resultsTable;
+
+    @FXML
+    private TableColumn&lt;GameResult, String&gt; player;
+
+    @FXML
+    private TableColumn&lt;GameResult, Integer&gt; score;
+
+    @FXML
+    private TableColumn&lt;GameResult, Integer&gt; length;
+
+    @FXML
+    private TableColumn&lt;GameResult, Integer&gt; eaten;
+
+    @FXML
+    private TableColumn&lt;GameResult, Integer&gt; survived;
+
+    @FXML
+    private void initialize(){
+<span class="nc" id="L52">        List&lt;GameResult&gt; highScoreList = resultDao.getGameResults(10);</span>
+
+<span class="nc" id="L54">        player.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;playerName&quot;));</span>
+<span class="nc" id="L55">        score.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;score&quot;));</span>
+<span class="nc" id="L56">        length.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;snakeLength&quot;));</span>
+<span class="nc" id="L57">        eaten.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;numOfPickups&quot;));</span>
+<span class="nc" id="L58">        survived.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;timeSurvived&quot;));</span>
+
+<span class="nc" id="L60">        ObservableList&lt;GameResult&gt; observableResult = FXCollections.observableArrayList();</span>
+<span class="nc" id="L61">        observableResult.addAll(highScoreList);</span>
+
+<span class="nc" id="L63">        resultsTable.setItems(observableResult);</span>
+<span class="nc" id="L64">    }</span>
+
     public void nextDifficulty(){
-<span class="nc bnc" id="L22" title="All 2 branches missed.">        if(difficulty.equals(&quot;easy&quot;)){</span>
-<span class="nc" id="L23">            setDifficulty(&quot;medium&quot;);</span>
-<span class="nc bnc" id="L24" title="All 2 branches missed.">        } else if(difficulty.equals(&quot;medium&quot;)){</span>
-<span class="nc" id="L25">            setDifficulty(&quot;hard&quot;);</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        } else if(difficulty.equals(&quot;hard&quot;)){</span>
-<span class="nc" id="L27">            setDifficulty(&quot;easy&quot;);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(difficulty.equals(&quot;easy&quot;)){</span>
+<span class="nc" id="L68">            setDifficulty(&quot;medium&quot;);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        } else if(difficulty.equals(&quot;medium&quot;)){</span>
+<span class="nc" id="L70">            setDifficulty(&quot;hard&quot;);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        } else if(difficulty.equals(&quot;hard&quot;)){</span>
+<span class="nc" id="L72">            setDifficulty(&quot;easy&quot;);</span>
         }
-<span class="nc" id="L29">    }</span>
+<span class="nc" id="L74">    }</span>
 
     public void setDifficulty(String diff) {
-<span class="nc bnc" id="L32" title="All 6 branches missed.">        if( !(diff.equals(&quot;easy&quot;) || diff.equals(&quot;medium&quot;) || diff.equals(&quot;hard&quot;)) ) {</span>
-<span class="nc" id="L33">            return;</span>
+<span class="nc bnc" id="L77" title="All 6 branches missed.">        if( !(diff.equals(&quot;easy&quot;) || diff.equals(&quot;medium&quot;) || diff.equals(&quot;hard&quot;)) ) {</span>
+<span class="nc" id="L78">            return;</span>
         }
-<span class="nc" id="L35">        difficulty = diff;</span>
-<span class="nc" id="L36">        difficultyButton.setText(&quot;Difficulty: &quot;+diff);</span>
-<span class="nc" id="L37">    }</span>
+<span class="nc" id="L80">        difficulty = diff;</span>
+<span class="nc" id="L81">        difficultyButton.setText(&quot;Difficulty: &quot;+diff);</span>
+<span class="nc" id="L82">    }</span>
 
     public void switchToGame(ActionEvent event) throws IOException {
 //        Parent root = FXMLLoader.load(getClass().getResource(&quot;/fxml/game.fxml&quot;));
 //        stage.setScene(new Scene(root));
 //        stage.show();
 
-<span class="nc" id="L44">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/game.fxml&quot;));</span>
-<span class="nc" id="L45">        Parent root = (Parent)loader.load();</span>
+<span class="nc" id="L89">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/game.fxml&quot;));</span>
+<span class="nc" id="L90">        Parent root = (Parent)loader.load();</span>
 
-<span class="nc" id="L47">        GameController controller = (GameController)loader.getController();</span>
-<span class="nc" id="L48">        Scene scene = new Scene(root);</span>
+<span class="nc" id="L92">        GameController controller = (GameController)loader.getController();</span>
+<span class="nc" id="L93">        Scene scene = new Scene(root);</span>
 
-<span class="nc" id="L50">        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();</span>
-<span class="nc" id="L51">        controller.initListeners(stage, scene, difficulty);      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni</span>
+<span class="nc" id="L95">        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();</span>
+<span class="nc" id="L96">        controller.initListeners(stage, scene, difficulty);      // stage és scene átadása a controllernek, hogy utána lehessen a billentyűnyomásokat figyelni</span>
 
-<span class="nc" id="L53">        stage.setTitle(&quot;Snake Game&quot;);</span>
-<span class="nc" id="L54">        stage.setResizable(true);</span>
+<span class="nc" id="L98">        stage.setTitle(&quot;Snake Game&quot;);</span>
+<span class="nc" id="L99">        stage.setResizable(true);</span>
 
-<span class="nc" id="L56">        stage.setScene(scene);</span>
-<span class="nc" id="L57">        stage.show();</span>
-<span class="nc" id="L58">    }</span>
+<span class="nc" id="L101">        stage.setScene(scene);</span>
+<span class="nc" id="L102">        stage.show();</span>
+<span class="nc" id="L103">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

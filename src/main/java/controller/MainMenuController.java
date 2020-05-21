@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,16 +9,59 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import results.GameResult;
+import results.GameResultDao;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 public class MainMenuController {
 
     String difficulty = "medium";
 
+    GameResultDao resultDao = new GameResultDao();
+
     @FXML
     Button difficultyButton;
+
+    @FXML
+    TableView<GameResult> resultsTable;
+
+    @FXML
+    private TableColumn<GameResult, String> player;
+
+    @FXML
+    private TableColumn<GameResult, Integer> score;
+
+    @FXML
+    private TableColumn<GameResult, Integer> length;
+
+    @FXML
+    private TableColumn<GameResult, Integer> eaten;
+
+    @FXML
+    private TableColumn<GameResult, Integer> survived;
+
+    @FXML
+    private void initialize(){
+        List<GameResult> highScoreList = resultDao.getGameResults(10);
+
+        player.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+        score.setCellValueFactory(new PropertyValueFactory<>("score"));
+        length.setCellValueFactory(new PropertyValueFactory<>("snakeLength"));
+        eaten.setCellValueFactory(new PropertyValueFactory<>("numOfPickups"));
+        survived.setCellValueFactory(new PropertyValueFactory<>("timeSurvived"));
+
+        ObservableList<GameResult> observableResult = FXCollections.observableArrayList();
+        observableResult.addAll(highScoreList);
+
+        resultsTable.setItems(observableResult);
+    }
 
     public void nextDifficulty(){
         if(difficulty.equals("easy")){
